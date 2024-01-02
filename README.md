@@ -21,19 +21,33 @@ Intensivao de Angular Realizado na DIO
 ```
 git config
 git config --global user.name "eumesmo" 
-git config --global user.email meu@gmail.com
+git config --global user.email myemail@gmail.com
 git config --global defaultBranch main
 git config --global credential.helper store
-git clone url
 
-cat nomedoarquivo
-git init
-git clone
+git clone https://github.com/SergioPaulo-ft/tabuada.git
+(necessario utilizar token para criar um clone no repositorio)
+
+git config --global --show-origin credential.helper
 cat .gitconfig
+cat .git-credentials
+
+mkdir repo-local (criando uma pasta)
+cd repo-local (abrindo uma pasta)
+git init (inicia um repositorio git)
+touch README.md(cria uma arquivo na pasta)
+git add . (salva todas as modificações no diretorio)
+git commit -m"add meus cursos"
+git log (ver commit realizado)
 
 
-cd nomedapasta
-cd ..
+git add Readme.md
+git status
+git commit -m"commit de atualização"
+
+echo nomedapasta/ > .gitignore(ignora a pasta)
+touch aulas/.gitkeep
+
 ```
 
 ## Referencias
