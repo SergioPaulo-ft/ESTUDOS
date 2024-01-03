@@ -68,5 +68,23 @@ git remote add origin https://github.com/SergioPaulo-ft/ESTUDOS.git
 git push -u origin main
 git rm --cached www
 
+git checkout -b teste (nova branch)
+echo "#commit-3-branch-teste" > commit-3-branch-teste.txt
+git branch -v (lista de commits por  branch)
+git merge teste
+
+git branch -D teste (deleta a branch)
+git pull 
+git diff main origin/main
+git merge origin/main
+git clone https.... --branch teste --single-branch (clonando apenas a branch)
+git stash (arquivando modificações)
+git stash list
+git stash apply
+
+
+
+
+
 
  
