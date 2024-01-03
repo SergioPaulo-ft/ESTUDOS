@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D1B285"
+    tools:context=".MainActivity9">
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="327dp"
+        android:layout_height="196dp"
+        android:layout_marginTop="240dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:shadowColor="#FFFFFF"
+        android:text="A cooperação global é essencial para atingir a ODS 14 Acordos internacionais, como a Convenção das Nações Unidas sobre o Direito do Mar, desempenham um papel importante. "
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="406dp"
+        android:layout_height="107dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="4dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:shadowColor="#FFFFFF"
+        android:text="Cooperação Internacional:"
+        android:textAlignment="center"
+        android:textColor="#B50A0A"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="552dp"
+        android:layout_marginEnd="152dp"
+        android:text="Proximo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="135dp"
+        android:layout_height="193dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginBottom="136dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/apertodemao" />
+</androidx.constraintlayout.widget.ConstraintLayout>

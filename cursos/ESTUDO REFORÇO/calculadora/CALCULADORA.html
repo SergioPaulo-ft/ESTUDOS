@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="number"  id="numero1">
+    <form name="form">
+        <input type="radio" value="somar" name="operacao">+
+        <input type="radio" value="subtrair" name="operacao">-
+        <input type="radio" value="multiplicar" name="operacao">X
+        <input type="radio" value="dividir" name="operacao">/
+    </form>
+
+    
+    <input type="number"  id="numero2">
+    <button id="next">=</button>
+    <div class="resp">resultado
+    </div>
+    <button id="historico">HISTORICO</button>
+    <div id="navbar"></div>
+    <script>
+        //ENTRADA E SAIDA DE DADOS
+        const resultado = document.querySelector("#next")
+        resp = document.querySelector(".resp")  
+        historico = document.querySelector("#historico")     
+        historicoContas = []
+        //ELEMENTOS LISTA
+        navbar = document.querySelector('#navbar')
+        //ADICIONANDO UMA LISTA UL DENTRO DO MEU NAVBAR
+        ul = document.createElement("ul")
+        navbar.appendChild(ul)
+        
+        
+        let conta = (n1,n2) => {
+            var radioValue = ["somar","multiplicar","subtrair","dividir"]
+            var operacaoArr = [n1+n2,n1*n2,n1-n2,n1/n2]
+            for(i = 0; radioValue.length; i++){
+                if(form.operacao.value == radioValue[i]){
+                    return operacaoArr[i]
+                }
+            }   
+        }
+        let txtConta = () => {
+            var radio = form.operacao.value
+            textoConta = ["multiplicar","somar","subtrair","dividir"]
+            sinal = ['X', '+', '-', '/']
+            for(i = 0; textoConta.length; i++){
+                if(radio == textoConta[i]){
+                    return `${numero1.value} ${sinal[i]} ${numero2.value}`
+                }
+            }
+        }
+        
+       resultado.addEventListener("click", function(){
+        var numero1 = parseFloat(document.querySelector("#numero1").value)
+        var numero2 = parseFloat(document.querySelector("#numero2").value)
+        var txtContaFinal = `${txtConta()} = ${conta(numero1,numero2)}`
+        historicoContas.push(txtContaFinal)
+        return resp.innerHTML = txtContaFinal
+       })
+
+       historico.addEventListener('click',function(){
+
+        ul.innerHTML = historicoContas.map(conta => `<li>${conta}</li>`).join("")
+        })
+       
+
+    </script>
+</body>
+</html>

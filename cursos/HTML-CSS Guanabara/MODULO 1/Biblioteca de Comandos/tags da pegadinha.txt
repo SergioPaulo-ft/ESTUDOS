@@ -1,0 +1,31 @@
+<b> </b>
+<i> </i>
+<strong> </strong>
+<em> </em>
+<mark> </mark>
+<big> </big>
+<small> </small>
+<strike> </strike>
+<del> </del>
+<ins> </ins>
+<sup> </sup>
+<code> </code>
+<pre> </pre>
+<q> </q>
+<blockquote> </blockquote>
+<abbr> </abbr>
+<ol> </ol> type="a A 1 I i" start = "n° do item"
+<li>
+<ul> </ul> disc circle square
+<dt> <dd> termo e significado
+
+<a href="" hreflang="pt-br" target="_blank" rel=""> </a> 
+
+<picture>
+          <source media="(max-width:750px)" srcset="" type="">
+          <source media="(max-width:1050px)" srcset="" type="">
+</picture>
+
+<audio preload="metadata" controls autoplay loop> <sorce src="" type="mpeg ogg wav mp3"></audio>
+
+<video controls> <source src="" srcset="" type="webm mp4 ogg"></video>

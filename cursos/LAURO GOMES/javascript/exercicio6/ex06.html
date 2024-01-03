@@ -1,0 +1,84 @@
+<html>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+            
+
+        }
+        #area{
+            padding: 20px;
+            background:#DB1F1F;
+            width: 400px;
+            height: 400px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: auto;
+            margin-top: 200px;
+            border-radius: 15px;
+            box-shadow: 1px 1px 10px black;
+
+        }
+        input{
+        margin: 15px;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        padding: 6px;
+        }
+        input:focus{
+           background: #F51BA3;
+           border: 1px inset black;
+        }
+    </style>
+<script>
+	var nota1=0;
+	nota2=0;
+	media=0;
+	 function calc()
+	 {
+    	nota1=parseFloat(focad.txtnota1.value);
+     	nota2=parseFloat(focad.txtnota2.value);
+     	media=(nota1+nota2)/2;
+     	if(media>=7)
+     	{
+     	focad.txtmedia.style.color="blue";
+     	focad.txtmedia.value=media+ " APROVADO ";
+        focad.foto.style = "block"
+        focad.foto.src= "https://thumbs.gfycat.com/AntiqueCaringBassethound-size_restricted.gif";
+     	}else if(media>=5 && media<=6.9){
+            focad.txtmedia.style.color="green";
+     	    focad.txtmedia.value=media+ " Exame";
+            focad.foto.style = "block"
+            focad.foto.src= "https://w7.pngwing.com/pngs/552/807/png-transparent-pepe-frog-illustration-gif-imgur-tenor-know-your-meme-twitch-emotes-vertebrate-meme-fictional-character-thumbnail.png";
+        }else{
+     		focad.txtmedia.style.color="red";
+     	focad.txtmedia.value=media+ " REPROVADO";
+         focad.foto.style = "block"
+        focad.foto.src= "https://usagif.com/wp-content/uploads/gif/crying-45.gif";
+     	}
+     
+
+	 }
+
+</script>
+	<body>
+
+        <div id="area">
+            <form name="focad">
+                NOME: <input type ="text" name="txtnome"><br>
+                NOTA1: <input type ="text" name="txtnota1"><br>
+                NOTA2: <input type= "text" name="txtnota2"><br>
+                <input type="button" value="calcular" onclick="calc()">
+                <br>
+                MEDIA: <input type="text" readonly="true" name="txtmedia"><br>
+                <img src="" width="150px" height="150px" name="foto" style="display:none">
+    
+            </form>
+        </div>
+		
+
+	</body>
+</html>

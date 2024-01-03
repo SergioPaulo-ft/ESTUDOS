@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex-box</title>
+    <style>
+        h1{
+            color: brown;
+        }
+        h2{
+            color: blue;
+        }
+        p{
+            font-size: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flex Conteiner</h1>
+    <h2>Display</h2>
+    <p>display: flex;<br>
+        // Torna o elemento um flex container automaticamente transformando todos os seus filhos diretos em flex itens.</p>
+    <h2>Flex-direction</h2>
+    <p>flex-direction: row;<br>
+        // Os itens ficam em linha<br>
+        flex-direction: row-reverse;<br>
+        // Os itens ficam em linha reversa, ou seja 3, 2, 1.<br>
+        flex-direction: column;<br>
+        // Os itens ficam em uma única coluna, um embaixo do outro.<br>
+        flex-direction: column-reverse;<br>
+        // Os itens ficam em uma única coluna, um embaixo do outro, porém em ordem reversa: 3, 2 e 1.</p>
+    <h2>Flex-wrap</h2>
+    <p>flex-wrap: nowrap;<br>
+        // Valor padrão, não permite a quebra de linha.<br>
+        flex-wrap: wrap;<br>
+        // Quebra a linha assim que um dos flex itens não puder mais ser compactado.<br>
+        flex-wrap: wrap-reverse;<br>
+        // Quebra a linha assim que um dos flex itens não puder mais ser compactado. A quebra é na direção contrária, ou seja para a linha acima</p>
+    <h2>flex-flow</h2>
+    <p>flex-flow: row nowrap;<br>
+        // Coloca o conteúdo em linha e não permite a quebra de linha.<br>
+        flex-flow: row wrap;<br>
+        // Coloca o conteúdo em linha e permite a quebra de linha.<br>
+        flex-flow: column nowrap;<br>
+        // Coloca o conteúdo em coluna e não permite a quebra de linha.</p>
+    <h2> justify-content</h2>
+    <p>justify-content: flex-start;<br>
+        // Alinha os itens ao início do container.<br>
+        justify-content: flex-end;<br>
+        // Alinha os itens ao final do container.<br>
+        justify-content: center;<br>
+        // Alinha os itens ao centro do container.<br>
+        justify-content: space-between;<br>
+        // Cria um espaçamento igual entre os elementos. Mantendo o primeiro grudado no início e o último no final.<br>
+        justify-content: space-around;<br>
+        // Cria um espaçamento entre os elementos. Os espaçamentos do meio são duas vezes maiores que o inicial e final.</p>
+    <h2>align-items</h2> 
+    <p>align-items: stretch;<br>
+        // Valor padrão, ele que faz com que os flex itens cresçam igualmente.<br>
+        align-items: flex-start;<br>
+        // Alinha os itens ao início.<br>
+        align-items: flex-end;<br>
+        // Alinha os itens ao final.<br>
+        align-items: center;<br>
+        // Alinha os itens ao centro.<br>
+        align-items: baseline;<br>
+        // Alinha os itens de acordo com a linha base da tipografia.<br>
+        align-items: center; e justfy-content: center;<br>
+        //aliamento vertical e horizontal</p> 
+    <h2>align-content</h2>
+    <p>align-content: stretch;<br>
+        // Valor padrão, ele que faz com que os flex itens cresçam igualmente na vertical.<br>
+        align-content: flex-start;<br>
+        // Alinha todas as linhas de itens ao início.<br>
+        align-content: flex-end;<br>
+        // Alinha todas as linhas de itens ao final.<br>
+        align-content: center;<br>
+        // Alinha todas as linhas de itens ao centro.<br>
+        align-content: space-between;<br>
+        // Cria um espaçamento igual entre as linhas. Mantendo a primeira grudada no topo e a última no bottom.<br>
+        align-content: space-around;<br>
+        // Cria um espaçamento entre as linhas. Os espaçamentos do meio são duas vezes maiores que o top e bottom.</p>
+    <h1>Flex Item</h1>
+
+</body>
+</html>

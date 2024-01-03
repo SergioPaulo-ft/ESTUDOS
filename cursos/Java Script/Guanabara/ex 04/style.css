@@ -1,0 +1,30 @@
+body{
+    background: rgb(3, 53, 84);
+    margin: 0;
+    padding: 0;
+    color: white;
+    text-align:center;
+    height: 100vh;
+    font-size: 30px;
+}
+
+.list{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    width: 300px;
+}
+button{
+    border-color: white;
+    background: brown;
+    padding: 30px;
+    color: white;
+}
+.saida{
+    background: brown;
+    border-radius: top(50%);
+    width: 500px;
+    margin: auto;
+}
+

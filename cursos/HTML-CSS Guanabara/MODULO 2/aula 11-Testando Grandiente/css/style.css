@@ -1,0 +1,10 @@
+*{
+    height: 100%;
+    margin-left: 15px;
+}
+
+body{
+    background-image: linear-gradient(to right, #AD0F66, #FF45AB, 
+    #FA2A9D, violet);
+    background-attachment: fixed;
+}

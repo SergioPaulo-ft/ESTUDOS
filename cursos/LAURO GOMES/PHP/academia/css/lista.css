@@ -1,0 +1,16 @@
+body{
+    background: beige;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+table{
+    width: 560px;
+}
+td{
+    padding: 8px;
+    background: white;
+}

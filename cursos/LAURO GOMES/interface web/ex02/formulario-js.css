@@ -1,0 +1,62 @@
+
+@import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&family=Caveat:wght@600&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background: rgb(32, 61, 96);
+    font-family: 'ADLaM Display', cursive;
+    color: rgb(194, 117, 16);
+    font-size: 22px;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 700px;
+    margin: auto;
+    margin-top: 200px;
+    
+}
+
+.form input{
+    border: none;
+    padding: 15px;
+    margin: 5px;
+    font-size: 22px;
+}
+
+.form input:focus{
+    outline: none;
+}
+
+.form #calcular{
+  
+    background-color: transparent;
+    color: antiquewhite;
+    font-family: 'Caveat', cursive;
+    font-size: 50px;
+}
+
+.form i{
+    font-size: 27px;
+}
+
+.form #calcular:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+    color: #097e82;
+}
+
+#resp {
+    background-color: #097e8250;
+    width: 650px;
+    margin: auto;
+    text-align: center;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.241);
+    color: rgb(225, 133, 13);
+}

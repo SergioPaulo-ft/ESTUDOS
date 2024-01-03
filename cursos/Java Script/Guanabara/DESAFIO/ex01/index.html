@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <div class="conteiner">
+            
+            <div class="sexo">
+                <p>Sexo:</p>
+
+                <input type="radio" name="sexo" checked>
+                <label for="masc">Masculino</label>
+                <input type="radio" name="sexo">
+                <label for="fem">Feminino</label>  
+            </div>
+        
+            <div class="dados">
+                <div id="divaltura">
+                <p>Altura:</p>
+                <input type="number" name="altura" id="altura">
+                </div>
+                <div id="divpeso">
+                <p>Peso atual:</p>
+                <input type="number"  name="peso" id="peso"><br>
+                </div>
+            </div>
+         
+            <button onclick="iniciar()"><strong>Teste de perfil</strong></button>
+         
+            <div id="div.mediac">
+            <p></p>
+            </div>
+            
+            <div id="div.pesoi">
+            <p></p>
+            </div>
+
+            <div id="res"></div>
+     </div>
+
+   <script>
+       
+    function iniciar(){
+        var altura = window.document.getElementById('altura')//documentos utilizados
+        var peso = window.document.getElementById('peso')
+        var mediac = window.document.getElementById('div.mediac')
+        var pesoi = window.document.getElementById('div.pesoi')
+        var sexo = window.document.getElementById('res')
+        var s = window.document.getElementsByName('sexo')
+        var a = Number(altura.value)//conversão para numero
+        var p = Number(peso.value)
+        var c = p/a**2
+        var m = c.toFixed(2) //dois gitos depois da virgula
+
+        if(m<18.5 && p!=0){  // se m for menor que 18 e p for diferente de 0 faz...
+            pesoi.innerHTML = `Media = ${m}. Estado de Magreza`
+        }else if(m>18.5 && m<24.9){
+            pesoi.innerHTML = `Media = ${m}. Peso Ideal`
+        }else if(m>25 && m<29.9){
+            pesoi.innerHTML = `Media = ${m}. Sobrepeso`
+        }else if(m>30 && m<39.9){
+            pesoi.innerHTML = `Media = ${m}. Obesidade`
+        }else if(m>40 && a!=0)  {
+            pesoi.innerHTML = `Media = ${m}. Obesidade Grave`
+        }else{
+            pesoi.innerHTML = `Erro, tente denovo.`
+        }
+        
+        if(s[0].checked){
+            sexo.innerHTML = 'Homem'
+        }else if(s[1].checked){
+            sexo.innerHTML = 'Mulher'
+        }
+
+    }
+    </script>
+</body>
+</html>

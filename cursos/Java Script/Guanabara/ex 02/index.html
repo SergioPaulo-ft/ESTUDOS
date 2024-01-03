@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variaveis e Interatividades</title>
+</head>
+<body>
+    <h1>Dados com JS</h1>
+    <button onclick="inicio()">Começar</button>
+    <section id ="resultado"> 
+        <p>Resultado</p>
+    </section>
+    <script>
+        function inicio(){
+            let nome = window.prompt('Qual é seu nome?')
+            let res = window.document.getElementById('resultado')
+            res.innerHTML = `<p>Olá, <strong>${nome}</strong>! É um grande prazer te conhecer! &#x1F596;`     
+        }
+
+
+        var n1 = Number(window.prompt('escolha um numero'))
+        var n2 = Number(window.prompt('escolha outro numero'))
+        var s = (n1 + n2)
+        window.alert(`A soma entre ${n1} e ${n2} é igual a = ` + s)
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <h1>Formulario Legal</h1>
+    <form action="" name="form">
+        <h2>Digite seu nome</h2>
+        <input type="text" name="nome">
+        <h2>Digite o valor do seu salario</h2>
+        <input type="number" name="salario">
+        <h2>Digite a porcentagem do seu reajuste</h2>
+        <input type="number" min='1' max="100" name="reajuste">
+        
+    </form>
+    <button onclick="calcReajuste()">Calcular</button>
+            <!-- Exercicio:
+            Recuperar os valores do formulario, e utilizando a função .innerHTML mostre os dados escolhidos do usuario, alem do valor do salario com o ajuste .
+            Se montar um table ganha MB e dinheiro -->
+            
+    <table id="resp">
+        <tr>
+          <th>Nome</th>
+          <th>Salario</th>
+          <th>Reajuste</th>
+          <th>Salario liquido</th>
+        </tr>
+      </table>
+    <script>
+        
+        function calcReajuste(){
+            var nome = form.nome.value
+            var salario = parseFloat(form.salario.value)
+            var reajuste = parseFloat(form.reajuste.value)
+            var calc = salario+(salario*(reajuste/100))
+
+            resp.innerHTML += `<tr><td>${nome}</td><td>${salario}</td><td>${reajuste}</td><td>${calc}</td></tr>`
+        }
+
+
+    </script>
+</body>
+</html>

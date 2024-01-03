@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D1B285">
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="404dp"
+        android:layout_height="175dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="4dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:shadowColor="#FFFFFF"
+        android:text=" Contribuição das Comunidades Locais:"
+        android:textAlignment="center"
+        android:textColor="#B50A0A"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="327dp"
+        android:layout_height="196dp"
+        android:layout_marginTop="360dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:shadowColor="#FFFFFF"
+        android:text="Comunidades costeiras desempenham um papel vital na conservação marinha. Estudos de caso mostram como práticas sustentáveis beneficiam essas comunidades. "
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="556dp"
+        android:layout_marginEnd="148dp"
+        android:text="Proximo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView18"
+        android:layout_width="151dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19"
+        app:srcCompat="@drawable/terralimpa" />
+</androidx.constraintlayout.widget.ConstraintLayout>

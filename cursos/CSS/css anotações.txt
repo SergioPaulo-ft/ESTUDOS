@@ -1,0 +1,14 @@
+box-sizing: border-box;
+gap: 32px;
+border-top: 0.4px solid #fff2e7;
+background-position: right;
+cursor: pointer;
+
+text-transform: uppercase;
+overflow: hiden;
+
+a::after{transition}               /*como direcionar um focus para acionar outra clas*/
+b:focus + a::after{}
+
+
+

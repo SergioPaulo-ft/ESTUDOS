@@ -1,0 +1,54 @@
+Document Object Model
+Conexão com html
+
+
+
+window   
+
+document ---- location ----- history
+|
+|
+|
+html 
+|
+|
+|
+head ------------- body                      ARVORE DE DADOS PARA JS 
+|                    | 
+|                    |  
+|                    |
+meta---meta     div---h1---p   
+
+
+
+
+
+BUSCANDO E ESCREVENDO ELEMENTOS
+
+document.imagens / document.title / document.links ...   seleciona atraves da hierarquia dos documentos
+
+console.dir(document.title) /  console.dir(document.head) ... MOSTRA RESPOSTA 
+
+.getElementById('')/ .getElementByClassName('')/ .getElementByTagName('')/ .querySelector('') ... busca no document o atributo html
+.querySelectorAll
+
+
+
+exemplo de codigo selecinando links e os escrevendo co console.log
+
+let as =  document.querySelectorAll("a")
+as.forEach(a => console.log(a))
+
+
+
+
+
+...MANIPULANDO CONTEUDO
+
+.textContent / .innerText / .innerHtml = ""/ .style.backgroundColor = "" / .style.border = ""
+classList.add("") / classList.remove("") / .length / .nextSibling / .previousSibling / 
+.createElement("") / .append() / .prepend() / .removeAttibute("") /
+
+
+
+window.addEventListener('click', 'keydown') leitura em tempo real 

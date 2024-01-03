@@ -1,0 +1,104 @@
+<html>
+    <body>
+        <form name="fo">
+        NOME <input type="text" name="txtnome"><br>
+        NOTA 1 <input type="text" name="txtnota1"><br>
+        NOTA 2 <input type="text" name="txtnota2"><br>
+        <input type="button" value="CADASTRAR" onclick="cad()"><br>
+        <input type="button" value="LISTA DE APROVADOS" onclick="ap()"><br>
+        <input type="button" value="LISTA DE RECUPERACAO" onclick="rec()"><br>
+        <input type="button" value="LISTA DE REPROVADOS" onclick="rep()"><br>
+        <textarea name="lista" cols="50" rows="10"></textarea>
+        </form>
+        <script>
+            nome=new Array(100); //define o vetor nome
+            nota1=new Array(100);
+            nota2=new Array(100);
+            i=0; // contador de alunos
+            j=0; //indice do vetor para busca
+            media=0; 
+            totap=0 //total aprovados 
+            totrec=0//total recuperacao
+            totrep=0//total reprovados
+            texto="";
+            function cad()
+            {
+                nome[i]=fo.txtnome.value;
+                nota1[i]=parseFloat(fo.txtnota1.value);
+                nota2[i]=parseFloat(fo.txtnota2.value);
+                i++;
+                alert("inserido com sucesso");
+                fo.txtnome.value="";
+                fo.txtnota1.value="";
+                fo.txtnota2.value="";
+
+            }
+            function ap()
+            {  texto = ""
+                totap=0
+                for(j=0;j!=i;j++)
+                {
+                    media=(nota1[j]+nota2[j])/2;
+                    if(media>=7)
+                    {
+                      texto=texto + " NOME: " + nome[j] +
+                      " NOTA 1: " +nota1[j]+ " NOTA2: "+ nota2[j]+
+                      " MEDIA "+media+ "\n";
+                      totap++; //soma um aluno aprovado    
+                    }
+
+
+
+                }
+            texto=texto+ " PERCENTUAL DE APROVADOS " + (totap/i)*100;
+            fo.lista.value=texto;
+
+            }
+
+            function rec() 
+            {  texto=""
+                totrec=0
+                for(j=0;j!=i;j++)
+                {
+                    media=(nota1[j]+nota2[j])/2;
+                    if(media>=5 &&media<7)
+                    {
+                        texto=texto + " NOME: " + nome[j] +
+                      " NOTA 1: " +nota1[j]+ " NOTA2: "+ nota2[j]+
+                      " MEDIA "+media+ "\n";
+                      totrec++;//soma um aluno recuperacao    
+                    }
+                }
+                texto=texto+ " PERCENTUAL DE RECUPERAÇÃO " + (totrec/i)*100;
+                fo.lista.value=texto;
+            }
+
+            function rep() 
+            {  
+                texto = ""
+                totrep=0
+                for(j=0;j!=i;j++)
+                {
+                    media=(nota1[j]+nota2[j])/2;
+                    if(media<7)
+                    {
+                      texto=texto + " NOME: " + nome[j] +
+                      " NOTA 1: " +nota1[j]+ " NOTA2: "+ nota2[j]+
+                      " MEDIA "+media+ "\n";
+                      totrep++; //soma um aluno reprovado    
+                    }
+
+
+
+                }
+            texto=texto+ " PERCENTUAL DE APROVADOS " + (totrep/i)*100;
+            fo.lista.value=texto;
+
+        
+            }
+
+
+        </script>
+
+    </body>
+</html>

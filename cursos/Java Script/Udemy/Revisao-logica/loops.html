@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="number" id="input"><button onclick="bt()" style="padding: 10px;"></button>
+    <h2>let n=0</h2>
+    <h2>while(n<=10)</h2>
+    <div id="res" ></div>
+    <input type="number" id="input2"><button onclick="bt()" style="padding: 10px;"></button>
+    <h2>for(let i = 0; i<=10; i++)</h2>
+    <div id="res2" ></div>
+    
+    <script>
+        function bt(){
+        let numero = document.querySelector("#input")
+        let num = numero.value
+        let numero2 = document.querySelector("#input2")
+        let num2 = numero2.value
+        let res = document.querySelector("#res")
+        let res2 = document.querySelector("#res2")
+        let n = 1
+        res.innerHTML = ""
+        res2.innerHTML = ""
+
+        while(n<=10){ //se repete enquanto n for menor ou igual a 10
+            let multiplica = n*num  
+            res.innerHTML += `${num} x ${n}  = ${multiplica} <br> `
+            n++
+        }
+        
+
+
+        //(do while) faça isso ... enquanto n<=10 
+        // do{
+        //     let multiplica = n*num  
+        //     res.innerHTML += `${num} x ${n}  = ${multiplica} <br> `
+        //     n++  
+        // }while(n<=10)
+
+
+
+
+
+        //for(variavel expressão encremento){}
+        for(let i = 0; i<=10; i++){
+            let multiplica2 = i*num2
+             res2.innerHTML += `${num2} x ${i}  = ${multiplica2} <br> `
+         }
+        }
+
+        
+        
+    </script>
+</body>
+</html>

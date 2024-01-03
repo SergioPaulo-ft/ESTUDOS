@@ -1,0 +1,10 @@
+echo - usado para escrever na tela
+
+variavel no php - $num = 5;
+
+tipos de variaveis - 
+Inteiro: int/integer
+Real: real/float/double
+Caractere: String
+Logico: 1/false
+

@@ -1,0 +1,128 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Rampart One', cursive;
+    font-size: 20px;
+}
+
+body{
+    background-color: #6888FD;
+}
+
+.piano{
+    background: black;
+    width: 1000px;
+    height: 400px;
+    margin: 100px auto 0;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.controls{
+    padding: 30px;
+    display: flex;
+    width: 100%;
+    color: white;
+    justify-content: space-between;
+}
+.controls h1{
+    font-weight: 500;
+    font-size: 1.4rem;
+}
+
+.switcher {
+    width: 50px;
+    height: 25px;
+    background-color: #6888FD;
+    display: flex;
+    border-radius: 50px;
+    padding: 4px;
+}
+.switcher__button{
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-color: antiquewhite;
+    border-radius: 25px;
+}
+.switcher--active {
+    background-color: #0E2780;
+    justify-content: flex-end;
+}
+.checkbox__label{
+    display: flex;
+    gap: 15px;
+}
+
+.piano__keys {
+    width: 100%;
+    height: 300px;
+    background-color: gray;
+    border-radius: 15px;
+    padding: 30px 50px;
+    display: flex;
+}
+
+.white{
+    background-color: white;
+    flex-grow: 1;
+    border-radius: 5px;
+    border-bottom: 8px solid #ddd;
+    color: gray;
+    margin-left: -17px;
+    z-index: 1;
+}
+
+.key span{
+    font-weight: 600;
+    position: absolute;
+}
+
+.key {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+    user-select: none;
+}
+
+.black {
+    width: 40px;
+    background: linear-gradient(black, #33437D);
+    height: 150px;
+    border-radius: 0 0 5px 5px;
+    border-bottom: 8px solid #222;
+    margin-left: -20px;
+    z-index: 2;
+    color: white;
+}
+
+.piano__keys .white:nth-child(1) {
+    margin-right: 0;
+}
+.piano__keys .white:nth-child(5) {
+    margin-right: 20px;
+}
+.piano__keys .white:nth-child(12) {
+    margin-right: 20px;
+}
+.piano__keys .white:nth-child(17) {
+    margin-right: 20px;
+}
+.black--pressed{
+  background: linear-gradient(#33437D, black);
+  border-bottom: none;
+  height: 148px;  
+}
+.black--pressed{
+    background: linear-gradient(#33437D, black);
+    border-bottom: none;
+    height: 148px;  
+  }

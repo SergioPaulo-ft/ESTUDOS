@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Cad!</title>
+
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+	<script type="text/javascript" 
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+	<script type="text/javascript" 
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js">
+	</script>
+
+	<script type="text/javascript">
+		function validar(cep){
+		// Variavel para chamaro serviço! 
+		var siteApi = "https://viacep.com.br/ws/09720440/json/"+cep+"/json/";
+
+		//Enviando a requisicao para o http (site)
+		var dadosRetornados = new XMLHttpRequest();
+		//Executando o chamado e recebendo os dados
+		dadosRetornados.open("GET", siteApi);
+		
+		//Convertendo os dados recebidos
+		//e montando no formulario 
+		dadosRetornados.onreadystatechange = () =>
+		{
+			//Variavel para converter os dados
+			var dadosJson = dadosRetornados.responseText;
+			var dadosProntos = JSON.parse(dadosJson);
+
+			//Inserindo os dados nos campos do form 
+			document.getElementById('endereco').value = dadosProntos.logradouro;
+			document.getElementById('bairro').value = dadosProntos.bairro;
+			document.getElementById('cidade').value = dadosProntos.cidade;
+			document.getElementById('utf').value = dadosProntos.utf;
+		}
+		dadosRetornados.send();
+		
+	}
+	</script>
+
+</head>
+<body>
+	
+
+
+	<!--  Inicio Corpo da pagina  -->
+	<div class="container">
+		<div class="jumbotron">
+			Bem-vindo <p> meu chuchu!</p>
+			<h1> Cadastro</h1>
+			<p>  De pessoas lindas</p>
+		</div>
+ 
+     
+            
+            <br><br><br>
+
+            <div class="row form-group">
+				<form action="cadastro.php" method="post">
+				<div class="col-sm-4">
+					<input type="text" class="form-control" placeholder="nome"  id="nome" />
+				</div>
+                <div class="col-sm-4">
+					<input type="password" class="form-control" placeholder="senha"  id="senha" />
+				</div>
+
+				<div class="col-sm-4">
+					<input type="text" class="form-control" placeholder="email" id="email" />
+				</div>
+               </div>
+    
+            <div class="row form-group">
+				<div class="col-sm-3">
+					<input type="text" class="form-control" onblur="validar(this.value)" placeholder="CEP"/>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" placeholder="Endereço" id="endereco" />
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-sm-6">
+					<input type="text" class="form-control" placeholder="Bairro" id="bairro" />
+				</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" placeholder="Cidade" id="cidade" disabled />
+				</div>
+
+				<div class="col-sm-2">
+					<input type="text" class="form-control" placeholder="UF" id="uf" />
+				</div>
+
+				<br><br>
+
+				<button type="submit" class="btn btn-primary" value="Salvar" id="Salvar" name="Botao">Salvar</button>
+
+                </form>
+			</div>
+
+
+
+
+
+</body>
+</html>

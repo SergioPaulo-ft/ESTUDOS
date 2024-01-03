@@ -1,0 +1,73 @@
+<html>
+    <body>
+       <form name="fo">
+        NOME <input type="text" name="txtnome"><br>
+        SALARIO <input type="text" name="txtsalario"><br>
+        SETOR<input type="text" name="txtsetor"><br>
+        <input type="button" onclick="cad()" 
+        value="CADASTRAR"> <br>
+        <input type="button" onclick="listar()" 
+        value="LISTAR"> <br>
+        <input type="button" onclick="listamaior()" 
+        value="LISTAR MAIOR SALARIO"> <br>
+        <textarea name="relat"></textarea>
+    </form>
+    <script>
+        var nome=new Array(100);
+        salario=new Array(100);
+        setor=new Array(100);
+        i=0;
+        j=0;
+        maior=0;
+        texto="";
+        nomex="";
+        setorx="";
+        function cad()
+        {
+            nome[i]=fo.txtnome.value;
+            salario[i]=parseFloat(fo.txtsalario.value);
+            setor[i]=fo.txtsetor.value;
+            i++;
+            alert("Cadastrado com sucesso");
+            fo.txtnome.value = ""
+            fo.txtsalario.value = ""
+            fo.txtsetor.value = ""
+ 
+        }
+        function listar()
+        {
+            texto="";
+            for(j=0;j!=i;j++)
+            {
+                texto=texto+ " nome "+nome[j]+
+                " salario "+ salario[j] +
+                " setor "+setor[j]+ "\n";
+            }
+            fo.relat.value=texto;
+ 
+        }
+ 
+        function listamaior()
+    {
+        maior=0;
+        for(j=0;j!=i;j++)
+        {
+          if(salario[j]>maior)
+          {
+            maior=salario[j];
+            nomex=nome[j];
+            setorx=setor[j];
+            
+          }
+ 
+        }
+ 
+        texto= " FUNCIONÁRIO DE MAIOR SALARIO "+nomex+
+        " SALARIO "+ maior + " do setor "+ setorx;
+        fo.relat.value=texto; 
+ 
+    }
+ 
+    </script>
+    </body>
+</html>

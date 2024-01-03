@@ -1,0 +1,91 @@
+<html>
+    <body>
+        <form name="fo">
+        NOME <input type="text" name="txtnome"><br>
+        IDADE <input type="text" name="txtidade"><br>
+        SEXO <input type="text" name="txtsexo"><br>
+        <input type="button" value="CADASTRAR" 
+        onclick="cad()"><br>
+        <input type="button" value="LISTAR IDADE" 
+        onclick="listaidade()"><br>
+        <input type="button" value="LISTAR MULHERES" 
+        onclick="listamu()"><br>
+        <input type="button" value="LISTAR HOMENS" 
+        onclick="listahom()"><br>
+        <textarea name="lista"></textarea>
+      
+        </form>
+ 
+        <script>
+            var nome=new Array(100);
+                idade=new Array(100);
+                sexo=new Array(100);
+                i=0; // contar o número de entradas
+                j=0;//indice do vetor
+                texto="";
+                function cad()
+                {
+                    if(isNaN(fo.txtidade.value))
+                    {
+                     alert("voce entrou com letra na idade os dados nao serao salvos");
+ 
+                    }
+                    else
+                    {
+                        nome[i]=fo.txtnome.value;
+                        idade[i]=parseInt(fo.txtidade.value);
+                        sexo[i]=fo.txtsexo.value;
+                        i++;
+                        alert("inserido com sucesso");
+ 
+                    }
+                }
+              
+          function listaidade()
+          {
+            texto=" RELACAO DE PESSOAS CUJA IDADE É MAIOR DO QUE "+
+            idade[0]+" \n";
+            for(j=0;j!=i;j++)
+            {
+                if(idade[j]>idade[0])
+                {
+                    texto=texto+ "nome "+nome[j]+ " idade "+
+                    idade[j]+ " sexo "+sexo[j]+ " \n";
+ 
+                }
+            }
+            fo.lista.value=texto;
+            
+        }
+         function listamu()
+         {
+            texto=" RELACAO DE PESSOAS DO SEXO FEMININO  \n";
+            for(j=0;j!=i;j++)
+            {
+                if(sexo[j]=="f")
+                {
+                    texto=texto+ "nome "+nome[j]+ " idade "+
+                    idade[j]+ " sexo "+sexo[j]+ " \n";
+ 
+                }
+            }
+            fo.lista.value=texto;
+         }
+ 
+         function listahom()
+         {
+            texto=" RELACAO DE PESSOAS DO SEXO MASCULINO E MENOR DE 21 ANOS  \n";
+            for(j=0;j!=i;j++)
+            {
+                if(sexo[j]=="m" && idade[j]<21)
+                {
+                    texto=texto+ "nome "+nome[j]+ " idade "+
+                    idade[j]+ " sexo "+sexo[j]+ " \n";
+ 
+                }
+            }
+            fo.lista.value=texto;
+         }
+        </script>
+    </body>
+</html>

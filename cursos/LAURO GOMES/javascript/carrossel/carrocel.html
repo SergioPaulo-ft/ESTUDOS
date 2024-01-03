@@ -1,0 +1,185 @@
+<html>
+<style>
+    p{
+        font-size: 30px;
+        text-align: center;
+    }
+ 
+    
+    #celular{
+        margin:auto;
+        width:500px;
+        height:500px;
+        background: #87CEEB;
+        display:none;
+ 
+    }
+ 
+    #eletro{
+        margin:auto;
+        width:700px;
+        height:500px;
+        background: #87CEEB;
+        display:none;
+ 
+    }
+ 
+    #brinq{
+        margin:auto;
+        width:500px;
+        height:500px;
+        background: #87CEEB;
+        display:none;
+ 
+    }
+ 
+    </style>
+<body>
+Fazer uma página com 3 DIVs a 1 div será de Celular, a 2 de eletrônico a 3 de brinquedos.
+Nestas Divs colocar as do produto de cada categoria e sua descricão e preço colocar um botão comprar.
+<form name=fobotao>
+    <p align=center> <input type =button value="Celular" 
+        onclick="vercelular()">
+        <input type =button value="Eletronico" 
+        onclick="vereletro()">
+       <input type =button value="Brinquedo" 
+        onclick="verbrinq()">
+    </p>
+</form>
+<div id=celular>
+    <form name=focel>
+    <p> <img src="celular1.png" width="100" height="100">
+        <img src="celular2.png" width="100" height="100">
+        <img src="celular3.png" width="100" height="100"></p>
+        <p> Samsung       Nokia        xim</p>
+        <p> R$1.500       R$2.000      R$800,00</p>
+        <p> <input type=button value="Comprar" onclick="comprar(1)">
+           <input type=button value="Comprar" onclick="comprar(2)">
+           <input type=button value="Comprar" onclick="comprar(3)">
+ 
+        </p>
+ 
+    </form>
+</div>
+ 
+<div id=eletro>
+    <form name=foeletro>
+        <p><img src="tv1.png" width="200" height="200">
+        <img src="tv2.png" width="200" height="200">
+        <img src="tv3.png" width="200" height="200"></p>
+        <p> smart tv     philco       philips</p>
+        <p> R$2.500       R$2.000      R$2.500,00</p>
+        <p> <input type=button value="Comprar" onclick="comprar(4)">
+           <input type=button value="Comprar" onclick="comprar(5)">
+           <input type=button value="Comprar" onclick="comprar(6)">
+ 
+        </p>
+ 
+    </form>
+</div>
+ 
+<div id=brinq>
+    <form name=fobrinq>
+        <p><img src="br1.png" width="100" height="100">
+        <img src="br2.png" width="100" height="100">
+        <img src="jogo3.png" width="100" height="100"></p>
+        <p> casinha      dragão      jogo</p>
+        <p> R$200       R$100        R$50.00</p>
+        <p> <input type=button value="Comprar" onclick="comprar(7)">
+           <input type=button value="Comprar" onclick="comprar(8)">
+           <input type=button value="Comprar" onclick="comprar(9)">
+ 
+        </p>
+
+
+ 
+    </form>
+</div>
+<form name=foresult>
+    <p> <textarea name=carrinho rows=20 cols=100></textarea>
+    </p>
+</form>
+<script>
+    var texto="";
+    function vercelular()
+    {
+document.getElementById("celular").style.display="block";
+document.getElementById("eletro").style.display="none";
+document.getElementById("brinq").style.display="none";
+ 
+    }
+ 
+    function vereletro()
+    {
+document.getElementById("celular").style.display="none";
+document.getElementById("eletro").style.display="block";
+document.getElementById("brinq").style.display="none";
+    }
+ 
+function verbrinq()
+{
+document.getElementById("celular").style.display="none";
+document.getElementById("eletro").style.display="none";
+document.getElementById("brinq").style.display="block";
+ 
+}
+ function comprar(op)
+ {
+if (op==1)
+{
+     texto=texto + " SAMSUNG    R$1.500 \n";
+foresult.carrinho.value=texto;
+}
+else
+if(op==2)
+{
+    texto=texto + " NOKIA    R$2.000 \n";
+foresult.carrinho.value=texto;
+ }
+else
+ if(op==3)
+ {
+texto=texto + " XIM    R$800 \n";
+foresult.carrinho.value=texto;
+ }
+else
+    if(op==4)
+    {
+texto=texto + " smart tv    R$2.500 \n";
+foresult.carrinho.value=texto;
+    }
+    else
+if(op==5)
+{
+    texto=texto + " philco    R$2.000 \n";
+foresult.carrinho.value=texto;
+}
+else
+if(op==6)
+{
+texto=texto + " philips    R$2.500 \n";
+foresult.carrinho.value=texto;
+}
+else
+if(op==7)
+{
+    texto=texto + " casinha     R$200 \n";
+foresult.carrinho.value=texto;
+}
+else
+if(op==8)
+{
+    texto=texto + " dragão      R$100 \n";
+foresult.carrinho.value=texto;
+}
+else
+if(op==9)
+{
+texto=texto + "  jogo     R$50 \n";
+foresult.carrinho.value=texto;
+ 
+}
+}
+</script>
+</body>
+</html>

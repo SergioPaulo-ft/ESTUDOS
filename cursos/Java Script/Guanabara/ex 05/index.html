@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Condições</title>
+</head>
+<body>
+    <h1>Teste de Velocidade</h1>
+    <input type="number" onclick="calcular()" name="txtvel" id="txtvel"><km>
+    <button onclick="açao()">OK</button>
+    <div id="resp">Escreva sua velocidade</div> 
+    
+    <script>
+
+        function açao(){
+            var txtvel = window.document.getElementById('txtvel')
+            var res = window.document.getElementById('resp')
+            var res2 = window.document.getElementById('resp2')
+            var vel = Number(txtvel.value)
+            res.innerHTML = `Ta suave pai.`
+            if(vel>60){
+                res.innerHTML = `Mutado. Ratiou cara.<br>Mais cuidado na proxima vez.`
+            }
+            if(vel>80){
+                res.innerHTML = `Mutado. Ratiou muito meu parceiro<br>Mais cuidado na proxima vez.`
+            }
+            if(vel>120){
+                res.innerHTML = `Mutado. Mula só faz merda.<br>Ficou maluco cara nunca mais dirija seu acefalo.`
+             
+            }
+
+        }
+    </script>
+    
+</body>
+</html>

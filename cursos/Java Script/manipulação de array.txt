@@ -1,0 +1,21 @@
+// A ARRAY armazena variaveis dentro de um objeto
+const arr = [] 
+const arr = new Array()
+
+exemplo 
+
+const arr = [1,5,10,"ola", true)
+
+
+//.every seleciona todas as variaveis da aray (RELATIVO A UMA PORTA END)
+//.some indica alguma variação no array (RElATIVO A UMA PORTA OR)
+//.filter nao altera o objeto, apenas filtra a ARRAY e retorna uma nova array
+//.forEach é um loop igual ao for(){}
+//.map transforma uma array elemento por elemento
+	
+let apenasNumeros = arr.some(function(el){  
+	return typeof === "number"
+}
+//apenasNumeros = false
+
+

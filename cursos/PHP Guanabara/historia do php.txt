@@ -1,0 +1,38 @@
+1970 - surgimento da internet
+
+1990 - surgimento do www
+
+php trabalha junto com o html
+
+1994 - Iniciou como uma interface para gerenciamento da pagina web
+
+1995 - Se transformou em um interpretador de formularios
+
+php é feita com ruple e linguagem c
+
+1996 - php teve acesso ao banco de dados
+
+1997 - Inicio da interatividade das paginas web utilizando php
+
+1998 - php foi reescrito 
+
+1999 - php ganha uma reforma em sua segurança
+
+2000 - versao 4 do php
+
+2004 - php 5
+
+Client side -> as informações sao processadas pelo lado do cliente
+
+server side -> processamento maior do lado do servidor 
+
+O php trabalha com o server side. Processando as informações no servidor e devolvendo o arquivo ja processado para o cliente.
+
+wamp server = windows+apashe+mysql+php
+
+
+
+
+ 
+
+

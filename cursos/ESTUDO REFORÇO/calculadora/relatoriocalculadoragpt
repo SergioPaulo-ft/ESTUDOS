@@ -1,0 +1,22 @@
+O código fornecido é uma página HTML com JavaScript embutido. Ele realiza cálculos com base nos valores inseridos nos campos de entrada e exibe o resultado na página. Vamos analisar como as variáveis se relacionam com as funções no código:
+
+resultado, resp, historico, historicoContas, navbar e ul são variáveis que foram declaradas usando a palavra-chave const. Essas variáveis são utilizadas para armazenar referências a elementos HTML na página, obtidos por meio dos seletores CSS (querySelector). Elas permitem interagir com os elementos HTML e manipular seu conteúdo ou comportamento.
+
+operacoes é um objeto que armazena diferentes funções de operações matemáticas. Cada função é associada a uma chave, que corresponde aos valores dos botões de rádio (somar, subtrair, multiplicar e dividir). Essas funções são usadas posteriormente para executar a operação matemática correspondente com base nos valores dos campos de entrada.
+
+txtConta é uma função que retorna uma string que representa a operação matemática selecionada e os valores dos campos de entrada. Essa função utiliza o valor do botão de rádio selecionado para determinar o sinal da operação.
+
+A função associada ao evento click do botão resultado é executada quando o botão é clicado. Ela realiza as seguintes ações:
+
+Obtém os valores dos campos de entrada convertendo-os em números usando parseFloat.
+Chama a função txtConta para obter a representação da operação matemática.
+Utiliza a representação da operação para acessar a função correspondente no objeto operacoes e realizar o cálculo.
+Concatena a representação da operação com o resultado do cálculo e armazena em txtContaFinal.
+Adiciona txtContaFinal ao array historicoContas para manter o histórico das operações.
+Atualiza o conteúdo do elemento HTML com a classe .resp com o valor de txtContaFinal.
+A função associada ao evento click do botão historico é executada quando o botão é clicado. Ela realiza as seguintes ações:
+
+Utiliza o método map para percorrer o array historicoContas e gerar uma nova array contendo elementos <li> com cada item do histórico.
+Utiliza o método join para concatenar os elementos da nova array em uma única string, separados por uma string vazia.
+Define o conteúdo do elemento <ul> (criado anteriormente e armazenado em ul) como a string gerada.
+Dessa forma, as variáveis no código são usadas para armazenar referências a elementos HTML, realizar operações matemáticas, construir strings representando as operações e resultados, e exibir o resultado na página.

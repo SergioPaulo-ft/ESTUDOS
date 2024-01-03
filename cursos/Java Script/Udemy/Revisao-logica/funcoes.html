@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Funções</h1>
+    <script>
+        //declaração de funcão
+        function ola(){
+            document.write('declaração de função')
+            console.log('expressao de função')
+        }
+
+        ola()
+        
+
+        //experssao de função
+        const ola2 = function(){
+            console.log('expressao de função')
+        }
+        ola2()
+
+
+        //arrow functions
+        const ola3 = () => {
+            console.log('arrow functions acionada')
+        }
+        ola3()
+
+
+        //função retornando valores
+        function obtemDiaSemana(){
+            return new Date().getDay() 
+            //expressão reponsável por extrair dia da semana
+        }
+        console.log(obtemDiaSemana()) 
+
+
+        //adicionando valores a funções
+        function somar(n1 = 0, n2 = 0){ // para evitar o NAN
+            // n1 e n2 sao igual a 0 até que outro valor seja colocado no lugar
+            return n1 + n2
+        }
+        let soma = somar(3,5)  //passado parametro indiretamente
+        console.log(soma)
+        console.log(somar(10)) // passando parametro diretamente
+        console.log(somar())    
+        //
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+label {
+    background-color: coral;
+}
+
+input {
+    background-color: violet;
+    color:chocolate;
+    font-weight: bold;
+}
+
+form {
+    background-color: rgb(224, 209, 238);
+}
+
+h1 {
+    background-color: chartreuse;
+    color: yellow;
+    font-family: algerian;
+    font-size: 20px;
+    text-align: center;
+}
+
+#FormEstaciona {
+    width: 400px;
+    height: 350px;
+    margin: 0 auto;
+}

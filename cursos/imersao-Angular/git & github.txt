@@ -1,0 +1,72 @@
+git
+
+surgiu em 2002
+do linux
+faz gerenciamento do repositorio 
+cria copias gravadas na nuvem
+
+COMIT
+grava alterações 
+
+PULL 
+puxa as alterações
+
+PUSH
+empurra as informações do repositorio local para o remoto
+
+
+GITHUB
+
+plataforma de hospedagem de codigo para o controle de versão do git, e colaboração.
+
+criado em 2008
+sofreu um ataque DDOS em 2018
+comprada pela MICROSOFT
+
+comandos de configuração
+https://git-scm.com/doc  (link para documentação)
+
+git config
+git config --global user.name "eumesmo" 
+git config --global user.email sp44578066@gmail.com
+git config --global defaultBranch main
+git config --global credential.helper store
+
+git clone https://github.com/SergioPaulo-ft/tabuada.git
+(necessario utilizar token para criar um clone no repositorio)
+
+git config --global --show-origin credential.helper
+cat .gitconfig
+cat .git-credentials
+
+mkdir repo-local (criando uma pasta)
+cd repo-local (abrindo uma pasta)
+git init (inicia um repositorio git)
+touch README.md(cria uma arquivo na pasta)
+git add . (salva todas as modificações no diretorio)
+git commit -m"add meus cursos"
+git log (ver commit realizado)
+
+
+git add Readme.md
+git status
+git commit -m"commit de atualização"
+
+echo nomedapasta/ > .gitignore(ignora a pasta)
+touch aulas/.gitkeep
+
+git restore nomedapastaouarquivo(restaurando arquivo)
+git commit --amend -m"adiciona gitignore e diretórios aulas e resumos"
+(apagando commit)
+git reset --soft codigodeindentificação 
+git reset --mixed codigodeindentificação 
+git reset --hard codigodeindentificação
+
+git reflog 
+(salvar no repositorio remoto)
+git remote add origin https://github.com/SergioPaulo-ft/ESTUDOS.git
+git push -u origin main
+git rm --cached www
+
+
+ 

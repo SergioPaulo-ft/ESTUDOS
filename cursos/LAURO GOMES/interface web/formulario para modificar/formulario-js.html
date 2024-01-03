@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investimentos</title>
+    <link rel="stylesheet" href="formulario-js.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <form class="form"  id="form" name="form">
+        <label for="vlInicial">Valor Inicial de Investimento</label>
+        <input type="number" name="Vlinicial" id="Vlinicial" placeholder="$" value="1000">
+        <label for="deposito">Valor depositado por mes</label>
+        <input type="number" name="deposito" id="deposito" placeholder="$" value="1000">
+        <label for="TxJuros">Taxa de juros</label>
+        <input type="number" name="TxJuros" id="TxJuros" max="100" placeholder="%" value="10" >
+        <label for="anos">Anos de investimento</label>
+        <input type="number" name="anos" id="anos" min="1" placeholder="anos" value="2">
+     
+       <label>
+            <input type="submit" value="calcular$" id="calcular" name="calcular">
+            <i class="fa-solid fa-calculator"></i>
+        </label> 
+
+    </form>
+    <section id="resp">
+        <h4>Resultado Final✔</h4>
+        <table id="resp-table">
+            <tr>
+              <th>Juros Mensal(%)</th>
+              <th>Tempo de Investimento</th>
+              <th>Valor Inicial</th>
+              <th>Total depositado</th>
+              <th>Total Acumulado</th>
+            </tr>
+          </table>
+    </section>
+    <script src="formulario-js.js"></script>
+</body> 
+</html>

@@ -1,0 +1,57 @@
+para indicar um input deve-se usar .value e colocar dentro da function
+function ...{
+var numero = parseInt(document.querySelector("#numero").value)
+}
+
+
+
+
+
+para indicar uma função auto declaravel deve seguir o modelo:
+(function(){
+    function executar(){}
+    executar()
+})()
+
+
+
+para indicar uma arrow function deve seguir o modelo:
+const teste = () => {}
+
+
+Escopo
+Acesso a uma visibilidade de uma variavel
+local/global
+
+
+
+
+
+
+let/const = validado apenas dentro de blocos 
+ex:
+function acao(){
+let a = 2
+console.log(a) // variavel igual a 2
+}
+console.log(a) // variavel nao declarada, por estar fora do escopo
+
+
+
+
+
+const = nao pode ser mudado (constante)
+
+
+
+
+
+
+var = valido dentro de funções. 
+Esse tipo de variavel é sempre declado automaticamente no inicio do bloco
+mesmo que você coloque o valor dele depois:  
+
+ console.log(num) //vai retorna num undefined, retornando a variavel vazia mesmo antes de dar um valor a ela
+ var num = 56     //esse processo é chamado de Hoisting
+ 
+ao contrario do let e const 

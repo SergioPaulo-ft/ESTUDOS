@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tabela responsiva</title>
+    <style>
+        .conteiner{
+            overflow-x: auto;
+        }
+         table{
+            border-collapse: collapse;
+            margin: 50px 30px;
+        }
+        caption{
+            font-size: 1.3em;
+            font-weight: bold;
+            padding: 10px;
+        }
+        th,td{
+            border: 1px solid;
+            padding: 10px;
+        }
+        table .verde{
+            background-color: green;
+        }
+        table .amarelo{
+            background-color: yellow;
+        }
+        table .azul{
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="conteiner">
+        <table>
+            <colgroup>
+            <col class="verde">
+            <col class="amarelo" span="2">
+            <col class="azul">
+            </colgroup>
+            <caption>
+                Filmes favoritos
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col">Grupos</th>
+                    <th scope="col">Nomes</th>
+                    <th colspan="4" scope="colgroup" >Filmes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                     <th rowspan="3" scope="rowgroup">Mulheres</th>
+                     <td>Anaaedf maria</td>
+                     <td>Ramsabo</td>
+                     <td>Alisdfen</td>
+                     <td>Vingsdfadores</td>
+                </tr>
+                <tr>
+                    <td>Ana maria</td>
+                     <td>Rambo</td>
+                     <td>Alien</td>
+                     <td>Vingadores</td>
+                </tr>
+                <tr>
+                    <td>Ana maria</td>
+                     <td>Radfmbo</td>
+                     <td>Alidsen</td>
+                     <td>Vinsdfgadores</td>
+                </tr>
+                <tr>
+                    <th rowspan="3" scope="rowgroup">Homens</th>
+                    <td>Ana m656daria</td>
+                    <td>Ramdsfsdfbo</td>
+                    <td>Alisdfdfen</td>
+                    <td>Vindsfgadores</td>
+               </tr>
+               <tr>
+                   <td>Ana msdfaria</td>
+                    <td>Radfsdmbo</td>
+                    <td>Alddien</td>
+                    <td>Vingsdfdadores</td>
+               </tr>
+               <tr>
+                   <td>Ana mdfaria</td>
+                    <td>sdfRambo</td>
+                    <td>Aldfien</td>
+                    <td>Vingfdadores</td>
+               </tr>
+               <tr>
+                   <th colspan="4" scope="row">Total</th>
+                   <td>1000</td>
+               </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

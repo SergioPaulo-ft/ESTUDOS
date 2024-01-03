@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midias</title>
+</head>
+<body>
+    <h1>Imagem Dinâmica</h1>
+    <p></p>
+    <picture>
+        <p>Execute imagens em varias telas:</p>
+        <source media="(max-width:750px )" srcset="imagens/foto-p.png"  type="image/png">
+        <source media="(max-width:1050px )" srcset="imagens/foto-m.png" type="image/png">
+        <img src="imagens/foto-g.png" alt="foto grande flexivel">  
+    </picture>
+    <h1>audio</h1>
+    <p> <pre>
+        <code>
+        &lt; audio  preloud= "auto" controls &gt;
+            &lt; source src="midia/guanacast-33.mp3" type="audio/mpeg" &gt;
+            &lt; source src="midia/guanacast-33.ogg" type="audio/ogg" &gt;
+            &lt; source src="midia/guanacast-33.wav" type="audio/wav" &gt;
+        &lt;/audio&gt;
+        </code>
+    </pre>
+         </p>
+   
+    
+    <audio  preloud= "auto" controls >
+        <source src="midia/guanacast-33.mp3" type="audio/mpeg">
+        <source src="midia/guanacast-33.ogg" type="audio/ogg">   
+        <source src="midia/guanacast-33.wav" type="audio/wav">  
+        <p>Esse Navegador nao suporta esse audio</p> 
+    </audio>
+    
+    <p>direitos comerciais</p>
+   
+    <audio  preloud= "auto" controls >
+    <source src="midia/Merry Go - Silent Film Light - Kevin MacLeod.mp3" type="audio/mpeg">
+    <source src="midia/Merry Go - Silent Film Light - Kevin MacLeod.ogg" type="audio/ogg">   
+    <source src="midia/Merry Go - Silent Film Light - Kevin MacLeod.wav" type="audio/wav">  
+    </audio>
+     
+    <h1>Video</h1>
+
+    <p> <pre>
+        <code>
+        &lt;video controls width="500px" poster="imagens/poster china.jpg"&gt;
+            &lt; source src="midia/Pexels Videos 4585.mp4" type="video/mp4 &gt;
+            &lt; source src="midia/Pexels Videos 4585.mp4v" video/mp4 &gt;
+            &lt; source src="midia/Pexels Videos 4585.mwebm" type="video/webm"&gt;
+            &lt; source src="midia/Pexels Videos 4585.ogg" type="video/ogg" &gt;
+        &lt;/video&gt;
+        </code>
+    </pre>
+         </p>
+    <video controls width="500px" poster="imagens/poster china.jpg">
+        <source src="midia/Pexels Videos 4585.mp4" type="video/mp4">
+        <source src="midia/Pexels Videos 4585.mp4v" type="video/mp4">
+        <source src="midia/Pexels Videos 4585.mwebm" type="video/webm">
+        <source src="midia/Pexels Videos 4585.ogg" type="video/ogg">
+        <p>Esse Navegador nao suporta esse video</p>
+    </video>
+    <video src="midia/lol.webm" width="500px" controls ></video>
+    
+    
+</body>
+</html>

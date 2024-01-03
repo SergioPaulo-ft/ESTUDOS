@@ -1,0 +1,263 @@
+HOSTÓRIA JS
+
+interação
+
+Evolução
+ 1960 guerra fria
+ 1970 darpa
+ 1970 arpanet
+ 1993 html http www (tim beners-lee)
+ 1993 mosaic navegador
+ 1994 netscape
+ 1995 java script
+ 1995 internet explower (microsoft)
+ 1997 ECMA (padronização do java script)
+ 2010 nod.js  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VARIAVEIS 
+
+são abertos espaços para amarzenar dados denominando e dando valores
+
+var  dfsdfds= "dfgdff"
+let    dgdfgdfg= "ddg"
+const  dgdfgdfg= "ddg"
+
+Number()     tipos de variaveis
+String()
+Boolean()
+Array()
+Object()
+ 
+VARIAVEIS COMPOSTAS
+
+let num = [5,4,8,9,6,2]
+num[7] = 3//acrecentando valor selecioanando um elemento
+num.push(7)//ultima posição
+num.length//numero de posições(elementos)
+num.push(1)// direciona um valor no ultimo elemento
+num.sort()// coloca em ordem crescente
+num.indexOf(8)//procura valor 8 dentro dos elementos
+
+
+
+
+
+
+
+
+
+
+
+
+FUNÇÕES E COMANDOS
+
+Funções são blocos de construção fundamentais em JavaScrip. Uma função é um procedimento de JavaScript - um conjunto de instruções que executa uma tarefa ou calcula um valor. Para usar uma função, você deve defini-la em algum lugar no escopo do qual você quiser chamá-la.
+
+Functions{}         
+Math.PI               console
+Math.sqrt
+window.document.body.backgroundColor = 'black'
+window.prompt
+window.alertS
+window.write
+window.writeln
+`${n}` "" ''
+n.length //contar numero de caracteres
+n.toUpperCase() // Letras maiusculas
+n.toFixed(2) // duas casas depois da virgula
+n.toFixed(2).replace('.', ',') // transformar virgula em ponto
+n.toLocaleString('pt-BR', {style:'currency',currency:'BRL'}) // conversão de moeda
+n.toLocaleString('pt-BR', {style:'currency',currency:'USO'})
+n.toLocaleString('pt-BR', {style:'currency',currency:'EUR'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OPERADORES
+
+
+
+Precedencia: aritmeco/relacionais/logicos
+
+Aritméticos: + | - | * | / | **(elevado) | %(resto da divisão) | 
+
+Atribuição: += | -= | *= | /= | **= | %= |    //adiciona operações nas variaveis ja atribuidas
+ 
+exemplo:
+ var b = 8
+ b+= 2                               //(b+2)
+ 10
+
+Incremento: ++n  | --n  |  n++ | n-- |
+
+Relacionais: > | < |  >= | <= |  ==(igual) | ===(identico)  | !=(diferente)
+
+Logicos: !(negação)  | &&(conjunção +) |  ||(disjunção tecla or) 
+
+Ternario:?(se sim) | :(se nao)
+
+exemplo: 
+var media = 5.6
+media > 7? 'Aprovado' : 'Reprovado'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DADOS
+
+informações 
+ 
+number 
+string = caracteres
+boolean = valores
+
+typeof
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DOM(Document Object Model)
+
+Árvore DOM
+
+window (location history document(html (head body(h1 p  p(strong) div))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CONDIÇÃO
+
+if{}else{}                 simples e composta
+
+while(){}                           reptição (enquanto for verdade...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Foto de Sachin C Nair no Pexels                         manha
+
+Foto de Nihat no Pexels                                 tarde
+
+Foto de Johannes Plenio no Pexels                       noite
+
+Foto de cottonbro no Pexels                             criança
+
+Foto de William Fortunato no Pexels                      jovem
+
+Foto de Edu Carvalho no Pexels                           idoso
+
+Foto de Andrea Piacquadio no Pexels                     adulto
+
+
+
+
+
+
+
+ 

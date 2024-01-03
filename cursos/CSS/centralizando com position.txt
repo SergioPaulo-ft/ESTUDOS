@@ -1,0 +1,8 @@
+centralisação de caixas
+
+conteiner{
+position:relative;
+}
+item{
+position:absolute;
+transform: translate(-50%, -50%);

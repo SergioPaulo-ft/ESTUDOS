@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu cpf</title>
+    <script src="js/script.js" defer></script>
+    <style>
+        #form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 500px;
+            gap: 8px;
+        }
+
+        #form input{
+            padding: 8px;
+            background-color: rgb(122, 161, 163);
+            border: none;
+            color: white;
+        }
+        #form input:focus{
+            outline: none;
+        }
+        #form .box-button input{
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        #form .box-button input:hover{
+      
+            background: rgb(6, 154, 162);
+        }
+
+    </style>
+</head>
+<body>
+    
+    <form action="" id="form" name="form">
+        <h1>Validando CPF</h1>
+        <label for="cpf">CPF:</label>
+        <input type="number" name="cpf" id="cpf" name="cpf" maxlength="11">
+
+        <div class="box-button">
+            <input type="submit" value="calcular">
+            <input type="reset" value="apagar">
+        </div>
+        <div id="resp"></div>
+    </form>
+</body>
+</html>
