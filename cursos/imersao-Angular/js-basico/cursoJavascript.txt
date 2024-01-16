@@ -1,0 +1,103 @@
+javascript
+
+variaveis e operadores
+
+var 
+const 
+let 
+
++ - * / = > < ! && ||
+
+console.log()
+
+tofixed(2) (numero pos virgula)
+
+OBJETOS
+const banco = {
+        nome: 'Sergio',
+        idade: 22,
+        descrever: function (){
+            console.log(`meu nome é ${this.nome}, e tenho ${this.idade} anos`)
+        }
+}
+//delete banco.nome
+banco.descrever()
+
+
+
+array = [1,5,6,5,'eu'...]
+
+array.push('otaria')
+array.pop() remove o item mais proximo
+array.shift() remove o item 0
+array.pop() remove o item mais proximo
+
+
+
+
+
+
+criando um arquivo de funções a parte chamado de funcoes-auxiliares.js
+extrair usando o metodo
+
+function gets(){return 10}
+function print(texto){return texto}
+module.exports = {gets, print}
+
+cria um aquivo que vai receber esses objetos chamado main.js
+exporta o arquivo criado
+
+const funcoes = require(./funcoes-auxliares.js)
+
+console.log(funcoes.gets()) usando um metodo criado
+
+
+
+
+
+
+
+Uma requisição é composta por url/request method/request Header/ Response headers
+
+url: caminho de um recurso 
+     composta por um ip e phathing
+
+method: GET/POST/PUT/DELETE/PATH
+
+A requisição é feita por um dominio composto por um ip(endereço)/pathing(caminho do recurso)
+O method determina o que sera feita com essa requisição
+
+o pathing é muito importante para passar argumentos de uma chamada.
+ex:
+ip/pokemon?name=charmander(parametro da requisição)
+https://pokeapi.co/api/v2/pokemon?name=charmander
+
+request/response headers = configuração da chamada no protocolo http
+status code = vai dizer o que aconteceu com a requisição
+
+Processamento assincrono
+Um processamento sem resposta de imediato. 
+durante o processo o cliente que realizou a requisição 
+estara esperando uma resposta do servidor.
+
+
+
+
+É necessario usar um fetch() para usar uma url dntro de um objeto por exemplo
+results.url estaria incorreto
+o correto seria separar as url encontradas e fazer uma requisição para cada item 
+
+objeto = {}
+objeto.detalhes = (promessa) => {
+	return fetch(promessa.url).then((responde)=>response.json())
+}
+... 
+.then((results)=>results.map(objeto.detalhes)))
+
+
+
+
+
+.map((value, index, array) =>{return = 'teste'}) 
+
+

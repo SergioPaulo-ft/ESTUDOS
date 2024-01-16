@@ -81,7 +81,9 @@ git clone https.... --branch teste --single-branch (clonando apenas a branch)
 git stash (arquivando modificações)
 git stash list
 git stash apply
+git log ---oneline (comparação com os commits remotos)
 
+ls
 
 
 

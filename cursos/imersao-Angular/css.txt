@@ -1,0 +1,5 @@
+display : grip;
+rem
+align-self: flex-end;
+max-width: 100%;
+grid-tramplate-columns: 1fr 1fr;
