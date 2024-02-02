@@ -44,3 +44,12 @@ loadMoreButton.addEventListener('click', () => {
         loadPokemonItens(offset, limit)
     }
 })
+
+for (let i = 0; i < pokemonList.children.length; i++) {
+    const element = pokemonList.children[i];
+    console.log(element)
+    element.addEventListener('click', () => {
+        console.log(`Clicked on element ${i}`);
+        // Add your logic here for what should happen when the element is clicked
+    });
+}
