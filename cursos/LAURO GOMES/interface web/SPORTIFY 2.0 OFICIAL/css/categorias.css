@@ -41,7 +41,7 @@
     margin-left: 10%;
 }
 .grid-container .box .grid-item:hover{
-   background-color: #89E565;
+   background-color: #60bb3c;
    transform: scale(1.03);
 }
 .descricao h3{

@@ -1,4 +1,16 @@
 
+
+
+
+.container-detail-description{
+    display: flex;
+}
+.detail-decription{
+    display: flex;
+}
+.detail-decription img{
+    width: 250px;
+}
 .content h1{
     margin: 0;
 }
