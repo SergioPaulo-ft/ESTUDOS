@@ -51,13 +51,15 @@ function loadPokemonItens(offset, limit) {
     .then((pokemons = []) => {
         const newHtml = pokemons.map(convertPokemonToLi).join('')
         pokemonList.innerHTML += newHtml
+    })
+    pokeApi.getPokemons(0, limit)
+    .then((pokemons = []) => {
         // descrição do pokemon 
         for (let i = 0; i < pokemonList.children.length; i++) {
             const element = pokemonList.children[i];
             
             element.addEventListener('click', () => {
                 pokeDescription.innerHTML = DescriptionPokemon(pokemons,i);
-                console.log(pokemons[i])
             });
         }   
     })

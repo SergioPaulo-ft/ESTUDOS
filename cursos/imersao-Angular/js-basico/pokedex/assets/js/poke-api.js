@@ -2,7 +2,7 @@ const pokeApi = {}
 
 function convertPokeApiDetailToPokemon(pokeDetail) {
     const pokemon = new Pokemon()
-    console.log(pokeDetail)
+
     pokemon.number = pokeDetail.id
     pokemon.name = pokeDetail.name
     
@@ -21,7 +21,7 @@ function convertPokeApiDetailToPokemon(pokeDetail) {
     pokemon.MainAbility = pokeDetail.abilities[0].ability.name
 
     pokemon.SecundaryAbility = pokeDetail.abilities[1].ability.name
-    // console.log(pokemon.SecundaryAbility)
+  
     return pokemon
 }
 
