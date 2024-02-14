@@ -1,0 +1,11 @@
+import {Component} from '@angular/core' 
+
+@Component({
+selector: 'input-vetor',
+templateUrl: './components/input.component.html',
+stylesUrl: './components/input.component.css'
+})
+
+export class Input {
+}
+

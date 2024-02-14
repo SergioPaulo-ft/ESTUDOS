@@ -148,8 +148,21 @@ class Funcionarios {}
 
 function minLength(length:number){
     return (target:any, key:string)=>{
-        console.log(target[key])
- 
+        let _value = target[key];
+
+        const getter = ()=> _value;
+        const setter = (value:string)=>{
+            if(value.length <length){
+                throw new Error(`Tamanho menor do que ${length}` )
+            }else{
+                _value = value;
+            }
+        }
+
+        Object.defineProperty(target, key, {
+            get:getter,
+            set:setter,
+        })
     }
 }
 class Api{
@@ -161,4 +174,5 @@ class Api{
     }
 }
 
-const api = new Api("Eu mesmo");
+const api = new Api("vovo");
+console.log(api.name)
