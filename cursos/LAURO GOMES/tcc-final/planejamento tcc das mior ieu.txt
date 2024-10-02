@@ -1,0 +1,23 @@
+TCC
+
+vamos criar uma ideia central baseada nestes pontos:
+
+Público-alvo
+Problemática (quais os problemas que estamos propondo resolver)
+Ferramentas que serão utilizadas
+Custos necessários (tempo, dinheiro, esforço mental etc...)
+
+Pensando nesses pontos precisamos responder essas perguntas referentes ao projeto:
+
+
+(O quê é, Necessidade, Viabilidade)
+Consegue definir o quê é?
+Há um público-alvo interessado?
+Atende pelo menos uma necessidade desse público?
+Quais ou qual?
+Quais ferramentas seriam utilizadas?(php,mysql,java,javascript...)
+Temos conhecimento pra isso?
+resp: sim >>>>> ok, temos tempo?
+resp: nao >>>>> temos tempo para alcançar esse conhecimento?
+
+Respondidas essas perguntas teremos um maior entendimento do que vai sustentar o nosso projeto. Podendo dividir quais sao as tarefas com maior prioridade.

@@ -1,0 +1,8 @@
+metodo de revisao de codigo 
+
+1 - Indentifica a utilidade das functions 
+	*pensar no que ela retorna como parametro ou return
+	*começar com a função de "escopo maior". Você precisa indentificar a função responsavel por chamar as outras que vao trabalhar num bloco de codigo mais especifico 
+2 - Quais metodos serao utilizados dentro dessas functions? Voce sabe o que ela faz, mas é necessario saber como ele faz também.
+	*.forEach(obj=>{}), .appendChild(), .createElement(), .push(), .addEventListener() ...etc
+3 - Sabendo a função individual de cada bloco de codigo agora voce deve fazer uma revisão de forma que voce consiga enxugar, refatorar ou inclementar. 

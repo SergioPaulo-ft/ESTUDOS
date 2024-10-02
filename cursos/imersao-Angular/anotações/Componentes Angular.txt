@@ -9,3 +9,37 @@ stylesUrl: './components/input.component.css'
 export class Input {
 }
 
+
+
+
+Ciclo de Vida -> Constructor-OnChange-OnInit
+
+Metodo OnInit (ela pode fazer modificações depois que um componente nasce)
+ex:
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-title',
+  templateUrl: './title.component.html',
+  styleUrls: ['./title.component.css']
+})
+export class TitleComponent implements OnInit{
+
+  nome:string = 'Sergio'
+
+  constructor() { }
+
+  ngOnInit(): void{
+    this.nome = `Ola ${this.nome}`
+  }
+}
+
+
+o init é iniciado primeiro depois o checked
+o checked verifica primeiro o conteudo e depois a View
+
+
+
+
+
+

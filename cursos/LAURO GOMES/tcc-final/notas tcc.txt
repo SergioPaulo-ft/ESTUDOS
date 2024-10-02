@@ -1,0 +1,88 @@
+ADM
+adm@gmail.com
+123456
+
+ONG CRIAR NO ADM
+Esperança Viva
+esperancaviva@gmail.com
+123456
+
+VOLUNTARIO CRIAR
+Sergio Lima
+sergio@gmail.com
+123456
+947003411
+09120098
+13
+
+VAGAS ONG
+Apoio Educacional
+Ajude crianças e jovens a alcançarem seu potencial acadêmico, oferecendo tutoria e suporte em diversas disciplinas. Sua dedicação pode transformar vidas!
+Rua das Flores, 123
+
+Comunicação e Marketing
+Participe da nossa equipe de comunicação, ajudando a divulgar nossas ações e campanhas nas redes sociais, newsletters e eventos.
+Avenida Brasil, 456
+
+Eventos
+Precisamos de sua ajuda para planejar e executar eventos de arrecadação de fundos, seminários e workshops que ajudam a sustentar nossa missão.
+Rua do Sol, 789
+
+Assistência Social
+Junte-se a nós para fornecer apoio e assistência a indivíduos e famílias que precisam de um suporte extra.
+Praça da Liberdade, 101
+
+Voluntário Ambiental
+Participe de projetos de conservação e sustentabilidade, como limpeza de áreas naturais, plantio de árvores e campanhas de conscientização ambiental.
+Alameda das Palmeiras, 202
+
+Saúde e Bem-Estar
+Ofereça seu suporte em campanhas de vacinação, oficinas de bem-estar e atividades físicas para a comunidade.
+Avenida das Nações, 303
+
+Administração
+Precisamos de ajuda na gestão de documentos, atendimento telefônico e organização do escritório para manter nossas operações em dia.
+Rua dos Pioneiros, 404
+
+Capacitação Profissional
+Conduza oficinas e treinamentos para ajudar indivíduos a desenvolverem habilidades profissionais e aumentarem suas chances de emprego.
+Travessa da Esperança, 505
+
+
+
+
+INSERTS CASO NAO DE CERTO
+
+INSERT INTO Adm (nomeAdm, emailAdm, senhaAdm) VALUES 
+('adm', 'adm@gmail.com', '123456');
+
+-- Inserts para a tabela voluntariocad
+INSERT INTO voluntariocad (nomeVol, emailVol, senhaVol, celular, cep, numero, dataNasc, descricao) VALUES 
+('Ana Souza', 'ana.souza@gmail.com', '123456', 987654321, '04101010', '456', '1998-02-20','Estudante universitária de Engenharia Ambiental interessada em contribuir para projetos de sustentabilidade.'),
+('Pedro Lima', 'pedro.lima@gmail.com', '123456', 987654322, '04101010', '789', '1995-10-15','Profissional de TI com experiência em desenvolvimento web. Busco oportunidades de voluntariado para ajudar ONGs a desenvolverem suas plataformas online.'),
+('Carla Santos', 'carla.santos@gmail.com', '123456', 987654323, '04101010', '123', '2000-07-01','Estudante de Psicologia interessada em realizar atividades de apoio emocional para comunidades carentes.');
+
+-- Inserts para a tabela ongcad
+INSERT INTO ongcad (nomeOng, emailOng, senhaOng, telefone, cep, numero, descricao) VALUES 
+('ONG Verde Vida', 'ong@gmail.com', '123456', 987654321, '04101010', '456', 'A ONG Verde Vida atua na preservação ambiental e educação ambiental. Buscamos voluntários comprometidos com a causa.'),
+('ONG Amor e Ação', 'ong.amoreaacao@gmail.com', '123456', 987654322, '04101010', '789', 'Nossa ONG atua no auxílio a comunidades carentes, oferecendo assistência médica e social. Precisamos de voluntários para nos ajudar a alcançar mais pessoas.'),
+('ONG Mãos Solidárias', 'ong.maossolidarias@gmail.com', '123456', 987654323, '04101010', '123', 'Trabalhamos com crianças carentes oferecendo atividades educativas e recreativas. Junte-se a nós para fazer a diferença na vida dessas crianças.');
+
+-- Inserts para a tabela mensagens
+INSERT INTO mensagens (nome, email, mensagem) VALUES 
+('Usuário Confuso', 'JoaPedro@gmail.com', 'Olá, estou um pouco perdido aqui no site. Não consigo encontrar onde devo me inscrever para as vagas de voluntariado. Poderia me ajudar?'),
+('ONG Ação Social', 'contato@ongsocial.org', 'Boa tarde! Nossa ONG recentemente se cadastrou no site para buscar voluntários, mas estamos com dificuldades em acessar as informações das inscrições. Gostaríamos de saber como podemos acessar esses dados para análise.'),
+('ONG Mãos Solidárias', 'contato@maossolidarias.org', 'Prezado Administrador,
+
+Gostaríamos de expressar nosso interesse em participar de sua plataforma. Somos a equipe da ONG "Mãos Solidárias", dedicada a promover ações sociais e voluntariado em nossa comunidade.
+Ao descobrir sua plataforma, ficamos impressionados com a dedicação à causa do voluntariado. Vemos sua plataforma como uma oportunidade valiosa para ampliar nosso alcance e conectar-nos com indivíduos dispostos a fazer a diferença.
+Estamos interessados em nos cadastrar em sua plataforma para compartilhar nossas atividades e oportunidades de voluntariado. Acreditamos que isso nos ajudará a encontrar voluntários comprometidos e apaixonados que possam contribuir significativamente para nossos projetos.
+Gostaríamos de obter informações sobre o processo de registro e os próximos passos para nos tornarmos parte ativa de sua comunidade.
+Agradecemos desde já sua atenção e aguardamos ansiosamente seu retorno.
+
+Atenciosamente'),
+('Usuário Perdido', 'Fernanda@gmail.com', 'Oi, estou tentando me cadastrar como voluntário, mas estou enfrentando alguns problemas com o formulário. Parece que não estou conseguindo enviar as informações corretamente. Poderia verificar isso para mim?');
+
+
+
+

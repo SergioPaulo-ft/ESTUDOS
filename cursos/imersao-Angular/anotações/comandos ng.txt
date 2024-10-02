@@ -1,0 +1,2 @@
+ng serve (criando um servidor local)
+ng generate component [nome do component] (craindo um componente pré configurado)

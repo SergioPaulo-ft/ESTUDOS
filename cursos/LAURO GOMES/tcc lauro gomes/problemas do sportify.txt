@@ -1,4 +1,0 @@
-muito pesado
-imagens usaram muita memoria - usar endereço web da img com mysql
-muitas paginas html 
-dificuldade na manutenção e atualização - github

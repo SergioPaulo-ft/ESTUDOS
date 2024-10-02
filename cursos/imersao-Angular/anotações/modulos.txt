@@ -1,0 +1,7 @@
+um modulo guarda componentes, pipes, diretivas e services
+
+app module = onde são usados os imports
+
+requisitos minimos:
+import {ngModule} from '@angular/core';
+declarações: declarations:[],imports:[],exports:[],providers:[],bootstrap:[appComponent]
