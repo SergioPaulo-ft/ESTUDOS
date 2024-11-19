@@ -28,7 +28,7 @@ interface
 enums
 debug 
 
-o node transforma o codigo em typescript em js para execução
+o node transforma o codigo typescript em js para execução
 
 npm init -y
 npm install typescript -D

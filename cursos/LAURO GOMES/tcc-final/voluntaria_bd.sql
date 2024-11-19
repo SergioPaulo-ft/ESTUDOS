@@ -1,4 +1,4 @@
-
+CREATE DATABASE id22128108_voluntaria_bd;
 USE id22128108_voluntaria_bd;
 
 CREATE TABLE `id22128108_voluntaria_bd`.`vagas` (
@@ -72,16 +72,14 @@ CREATE TABLE `id22128108_voluntaria_bd`.`inscricoes` (
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-CREATE TABLE `id22128108_voluntaria_bd`.`mensagens` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  `mensagem` TEXT NOT NULL,
-  `data_` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE = MyISAM
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
+CREATE TABLE mensagens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    mensagem TEXT NOT NULL,
+    data_ TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
 
 
