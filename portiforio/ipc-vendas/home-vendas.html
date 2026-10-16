@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Vendas</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- CSS header-->
+    <link rel="stylesheet" href="CSS/header.css">
+
+    <!-- CSS home -->
+    <link rel="stylesheet" href="CSS/home.css">
+</head>
+<body>
+    <header class="header">
+        <h1>IPC VENDAS</h1>
+        <div class="box-logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </div>
+    </header>
+
+    <main class="container-home">
+        <div class="box-search">
+            <label for="pesquisa"><i class="fa-solid fa-magnifying-glass"></i></label>
+            <input id="pesquisa" class="pesquisa" type="text" placeholder="Procure aqui">
+        </div>
+        <!--lista produtos ------------------------------------------------ -->
+        <div class="box-produto">
+            <img src="IMG/rolete 31.jpg" alt="Imagem do produto">
+            <form class="form-produto" id="form-produto">
+                <div class="descricao">
+                    <h2>Modelo:</h2>
+                    <p>Tubo...</p>
+                    <p>Eixo...</p>
+                </div>
+
+                <div class="inputs-comprimento">
+                    <h2>Comprimento:</h2>
+                    <label for="comprimento-tubo">Tubo</label>
+                    <input type="number" min="1" name="comprimento-tubo" id="comprimento-tubo" placeholder="mm">
+
+                    <label for="comprimento-eixo">Eixo</label>
+                    <input type="number" min="1" name="comprimento-eixo" id="comprimento-eixo" placeholder="mm">
+                </div>
+
+                <div class="custo-venda">
+                    <p>Custo:</p>
+                    <p>Venda:</p>
+                    <p>Venda Mercado Livre:</p>
+                </div>
+
+                <input type="submit" value="calcular" class="calcular" id="calcular">
+            </form>
+        </div>
+        <div class="box-produto">
+            <img src="IMG/rolete aço.jpg" alt="Imagem do produto">
+            <form class="form-produto" id="form-produto">
+                <div class="descricao">
+                    <h2>Modelo:</h2>
+                    <p>Tubo...</p>
+                    <p>Eixo...</p>
+                </div>
+
+                <div class="inputs-comprimento">
+                    <h2>Comprimento:</h2>
+                    <label for="comprimento-tubo">Tubo</label>
+                    <input type="number" min="1" name="comprimento-tubo" id="comprimento-tubo" placeholder="mm">
+
+                    <label for="comprimento-eixo">Eixo</label>
+                    <input type="number" min="1" name="comprimento-eixo" id="comprimento-eixo" placeholder="mm">
+                </div>
+
+                <div class="custo-venda">
+                    <p>Custo:</p>
+                    <p>Venda:</p>
+                    <p>Venda Mercado Livre:</p>
+                </div>
+
+                <input type="submit" value="calcular" class="calcular" id="calcular">
+            </form>
+        </div>
+        <div class="box-produto">
+            <img src="IMG/rolete 76 de carga.jpg" alt="Imagem do produto">
+            <form class="form-produto" id="form-produto">
+                <div class="descricao">
+                    <h2>Modelo:</h2>
+                    <p>Tubo...</p>
+                    <p>Eixo...</p>
+                </div>
+
+                <div class="inputs-comprimento">
+                    <h2>Comprimento:</h2>
+                    <label for="comprimento-tubo">Tubo</label>
+                    <input type="number" min="1" name="comprimento-tubo" id="comprimento-tubo" placeholder="mm">
+
+                    <label for="comprimento-eixo">Eixo</label>
+                    <input type="number" min="1" name="comprimento-eixo" id="comprimento-eixo" placeholder="mm">
+                </div>
+
+                <div class="custo-venda">
+                    <p>Custo:</p>
+                    <p>Venda:</p>
+                    <p>Venda Mercado Livre:</p>
+                </div>
+
+                <input type="submit" value="calcular" class="calcular" id="calcular">
+            </form>
+        </div>
+    </main>
+</body>
+</html>

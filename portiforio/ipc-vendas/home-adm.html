@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Vendas</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- CSS header-->
+    <link rel="stylesheet" href="CSS/header.css">
+
+    <!-- CSS home -->
+    <link rel="stylesheet" href="CSS/home.css">
+
+    <!-- CSS menu adm-->
+    <link rel="stylesheet" href="CSS/menu-adm.css">
+
+</head>
+<body>
+    <header class="header">
+        <h1>IPC VENDAS</h1>
+        <div class="box-logout" id="box-logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </div>
+    </header>
+
+    <main class="container-home-adm">
+        <aside class="menu-adm" id="menu-adm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M247.6 8C389.4 8 496 118.1 496 256c0 147.1-118.5 248-248.4 248C113.6 504 0 394.5 0 256 0 123.1 104.7 8 247.6 8zm.8 44.7C130.2 52.7 44.7 150.6 44.7 256c0 109.8 91.2 202.8 203.7 202.8 103.2 0 202.8-81.1 202.8-202.8 .1-113.8-90.2-203.3-202.8-203.3zm161.7 207.7l4.9 2.2v70c-7.2 3.6-63.4 27.5-67.3 28.8-6.5-1.8-113.7-46.8-137.3-56.2l-64.2 26.6-63.3-27.5v-63.8l59.3-24.8c-.7-.7-.4 5-.4-70.4l67.3-29.7L361 178.5v61.6l49.1 20.3zm-70.4 81.5v-43.8h-.4v-1.8l-113.8-46.5V295l113.8 46.9v-.4l.4 .4zm7.5-57.6l39.9-16.4-36.8-15.5-39 16.4 35.9 15.5zm52.3 38.1v-43L355.2 298v43.4l44.3-19z"/></svg>
+            <h2>Menu de Criação</h2>
+            <div class="box-links">
+                <a href="produtos.html">
+                    <div class="produtos links">
+                        <i class="fa-solid fa-plus"></i>
+                        <p>Produtos</p>
+                    </div>
+                </a>
+                <a href="tubo-eixo.html">
+                    <div class="tubo-eixo links">
+                        <i class="fa-solid fa-plus"></i>
+                        <p>Tubos / eixos</p>
+                    </div>
+                </a>
+                <a href="componentes.html">
+                    <div class="componentes links">
+                        <i class="fa-solid fa-gear"></i>
+                        <p>Componentes</p>
+                    </div>
+                </a>
+                <a href="contas-adm.html">
+                    <div class="contas links">
+                        <i class="fa-solid fa-users-line"></i>
+                        <p>Novas contas</p>
+                    </div>
+                </a>
+            </div>
+            <i class="fa-solid fa-chevron-left seta" id="esconder"></i>
+        </aside>
+        <div class="container-home">
+            <div class="box-search">
+                <label for="pesquisa"><i class="fa-solid fa-magnifying-glass"></i></label>
+                <input id="pesquisa" class="pesquisa" type="text" placeholder="Procure aqui">
+            </div>
+            <!--lista produtos ------------------------------------------------ -->
+            <div class="box-produto">
+                <img src="IMG/rolete 31.jpg" alt="Imagem do produto">
+                <form class="form-produto" id="form-produto">
+                    <div class="descricao">
+                        <h2>Modelo:</h2>
+                        <p>Tubo...</p>
+                        <p>Eixo...</p>
+                    </div>
+    
+                    <div class="inputs-comprimento">
+                        <h2>Comprimento:</h2>
+                        <label for="comprimento-tubo">Tubo</label>
+                        <input type="number" min="1" name="comprimento-tubo" id="comprimento-tubo" placeholder="mm">
+    
+                        <label for="comprimento-eixo">Eixo</label>
+                        <input type="number" min="1" name="comprimento-eixo" id="comprimento-eixo" placeholder="mm">
+                    </div>
+    
+                    <div class="custo-venda">
+                        <p>Custo:</p>
+                        <p>Venda:</p>
+                        <p>Venda Mercado Livre:</p>
+                    </div>
+    
+                    <input type="submit" value="calcular" class="calcular" id="calcular">
+                </form>
+            </div>
+            <div class="box-produto">
+                <img src="IMG/rolete aço.jpg" alt="Imagem do produto">
+                <form class="form-produto" id="form-produto">
+                    <div class="descricao">
+                        <h2>Modelo:</h2>
+                        <p>Tubo...</p>
+                        <p>Eixo...</p>
+                    </div>
+    
+                    <div class="inputs-comprimento">
+                        <h2>Comprimento:</h2>
+                        <label for="comprimento-tubo">Tubo</label>
+                        <input type="number" min="1" name="comprimento-tubo" id="comprimento-tubo" placeholder="mm">
+    
+                        <label for="comprimento-eixo">Eixo</label>
+                        <input type="number" min="1" name="comprimento-eixo" id="comprimento-eixo" placeholder="mm">
+                    </div>
+    
+                    <div class="custo-venda">
+                        <p>Custo:</p>
+                        <p>Venda:</p>
+                        <p>Venda Mercado Livre:</p>
+                    </div>
+    
+                    <input type="submit" value="calcular" class="calcular" id="calcular">
+                </form>
+            </div>
+            <div class="box-produto">
+                <img src="IMG/rolete 76 de carga.jpg" alt="Imagem do produto">
+                <form class="form-produto" id="form-produto">
+                    <div class="descricao">
+                        <h2>Modelo:</h2>
+                        <p>Tubo...</p>
+                        <p>Eixo...</p>
+                    </div>
+    
+                    <div class="inputs-comprimento">
+                        <h2>Comprimento:</h2>
+                        <label for="comprimento-tubo">Tubo</label>
+                        <input type="number" min="1" name="comprimento-tubo" id="comprimento-tubo" placeholder="mm">
+    
+                        <label for="comprimento-eixo">Eixo</label>
+                        <input type="number" min="1" name="comprimento-eixo" id="comprimento-eixo" placeholder="mm">
+                    </div>
+    
+                    <div class="custo-venda">
+                        <p>Custo:</p>
+                        <p>Venda:</p>
+                        <p>Venda Mercado Livre:</p>
+                    </div>
+    
+                    <input type="submit" value="calcular" class="calcular" id="calcular">
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="JS/estilo.js"></script>
+</body>
+</html>

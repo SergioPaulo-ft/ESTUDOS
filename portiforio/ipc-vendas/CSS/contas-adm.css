@@ -1,0 +1,101 @@
+:root {
+    --primary_color_blue: #0C0A29;
+    --secundary_color_blue: #0A1129;
+    --tertiary_color_blue: #0A1B29;
+    --background_color_gray: #D9D9D9;
+    --hover-color-blue: #080b3b;
+    --hover-secundary-color: #202670;
+    --titulo-destaque: #e22e2e;
+}
+a{
+    text-decoration: none;
+    font-size: 18px;
+    font-family: 'Itim', serif;
+    margin-left: 40px;
+    background: var(--background_color_gray);
+    padding: 20px;
+}
+a:hover{
+    color: var(--titulo-destaque);
+}
+.lista {
+    background-color: #a7a7a7;
+    margin: 40px 10px;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.lista h2 {
+    color: var(--primary_color_blue);
+    text-align: center;
+    margin: 30px 0;
+}
+
+.requerimento {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.requerimento p {
+    flex: 1;
+    font-size: 14px;
+    padding: 6px;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.requerimento .email {
+    font-size: 12px;
+    color: #555;
+    display: block; /* Faz o e-mail ficar embaixo */
+}
+
+.requerimento .negado,
+.requerimento .aceito {
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 50%;
+    flex-shrink: 0; /* Evita que os ícones diminuam */
+    cursor: pointer;
+}
+
+.negado {
+    background: #e22e2e;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.aceito {
+    background: #079c20;
+    color: #fff;
+    margin-left: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .requerimento {
+        flex-wrap: nowrap; /* Mantém os ícones e texto em linha */
+    }
+
+    .requerimento p {
+        font-size: 13px;
+        max-width: 190px;
+    }
+
+    .requerimento .email {
+        font-size: 11px;
+    }
+
+    .requerimento .negado,
+    .requerimento .aceito {
+        font-size: 16px;
+        padding: 6px;
+    }
+}

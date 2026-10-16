@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPC — Painel de Produção</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; background: #eef0f4; color: #1a1a2e;
+    font-family: 'Courier New', monospace; padding: 16px;
+  }
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
+  }
+  .logo {
+    background: #ffffff; border: 2px solid #1a1a2e; border-radius: 4px; padding: 5px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+  }
+  .logo .sub { font-size: 9px; letter-spacing: 4px; color: #999; }
+  .logo .main { font-size: 16px; letter-spacing: 5px; color: #1a1a2e; font-weight: bold; }
+  .tabs { display: flex; gap: 6px; }
+  .tab-btn {
+    background: #ffffff; border: 1.5px solid #ccc; border-radius: 4px;
+    color: #888; font-family: inherit; font-size: 10px; letter-spacing: 2px;
+    padding: 5px 14px; cursor: pointer;
+  }
+  .tab-btn.active { background: #e8f1ff; border-color: #1c7ed6; color: #1c7ed6; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Kanban layout */
+  .kanban-wrap { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+  .col {
+    flex: 1 1 185px; min-width: 175px; border-radius: 6px; padding: 10px 9px;
+    min-height: 260px; transition: border-color .15s; border: 1.5px solid;
+    background: #ffffff;
+  }
+  .col-header {
+    font-size: 10px; font-weight: bold; letter-spacing: 3px; padding-bottom: 7px;
+    margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid;
+  }
+  .col-count {
+    border-radius: 10px; padding: 1px 7px; font-size: 9px; border: 1px solid; font-weight: bold;
+  }
+  .empty-drop {
+    border-radius: 4px; padding: 18px 8px; text-align: center; font-size: 9px;
+    border: 1.5px dashed; transition: all .15s;
+  }
+
+  /* Card */
+  .card {
+    background: #ffffff; border-radius: 4px; padding: 7px 9px; margin-bottom: 7px;
+    cursor: grab; position: relative; user-select: none; border: 1.5px solid; border-left: 4px solid;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .card.dragging { opacity: 0.4; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .card-id { font-size: 11px; font-weight: bold; letter-spacing: 1px; }
+  .card-del {
+    background: none; border: none; color: #bbb; cursor: pointer;
+    font-size: 13px; line-height: 1; padding: 0 0 0 4px;
+  }
+  .card-del:hover { color: #e03131; }
+  .card-note { margin: 3px 0 0; font-size: 10px; color: #444; line-height: 1.35; }
+  .card-tags { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+  .tag {
+    font-size: 9px; background: #f1f3f5; border: 1px solid #dee2e6;
+    border-radius: 3px; padding: 1px 6px; color: #555; font-weight: bold;
+  }
+  .tag.late { background: #fff0f0; border-color: #ffa8a8; color: #e03131; }
+  .card-spec { font-size: 8px; color: #888; margin-top: 4px; }
+  .card-comps { font-size: 8px; color: #aaa; margin-top: 3px; }
+  .card-drag-hint { margin-top: 5px; font-size: 8px; color: #ccc; }
+
+  .confirm-overlay {
+    position: absolute; inset: 0; background: #ffffffee; backdrop-filter: blur(2px);
+    border-radius: 4px; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 5px; z-index: 10;
+  }
+  .confirm-overlay span { font-size: 10px; color: #e03131; font-weight: bold; }
+  .confirm-overlay .row { display: flex; gap: 6px; }
+  .btn-small {
+    color: #fff; border: none; border-radius: 3px; padding: 3px 10px;
+    font-family: inherit; font-size: 10px; cursor: pointer; font-weight: bold;
+  }
+
+  /* Side panel */
+  .side-panel { flex: 0 0 290px; min-width: 270px; display: flex; flex-direction: column; gap: 10px; }
+  .panel-box {
+    background: #ffffff; border: 1.5px solid #ddd; border-radius: 6px; padding: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel-title { font-size: 10px; letter-spacing: 3px; margin-bottom: 9px; font-weight: bold; }
+
+  input, select, textarea {
+    width: 100%; background: #f8f9fb; border: 1.5px solid #d8dce3; border-radius: 4px;
+    color: #1a1a2e; font-family: 'Courier New', monospace; font-size: 10px;
+    padding: 5px 8px; box-sizing: border-box; outline: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: #1c7ed6; background: #fff; }
+  .row-flex { display: flex; gap: 5px; margin-top: 5px; }
+  .row-flex > * { flex: 1; }
+  .section-label {
+    font-size: 9px; letter-spacing: 2px; margin-bottom: 5px; margin-top: 8px; font-weight: bold;
+  }
+  .section-divider { border-top: 1px solid #e2e5ea; padding-top: 8px; margin-top: 10px; }
+  .static-val {
+    color: #555; display: flex; align-items: center; font-weight: bold;
+  }
+  .comp-row { display: flex; gap: 4px; margin-bottom: 4px; }
+  .comp-row select { flex: 3; font-size: 9px; }
+  .comp-row input { flex: 1; font-size: 9px; }
+  .comp-row button {
+    background: none; border: none; color: #bbb; cursor: pointer; font-size: 14px; padding: 0 2px;
+  }
+  .comp-row button:hover { color: #e03131; }
+  .add-comp-btn {
+    width: 100%; background: #f8f9fb; border: 1.5px dashed #ccc; border-radius: 4px;
+    color: #888; font-family: inherit; font-size: 9px; padding: 4px; cursor: pointer; margin-top: 2px;
+  }
+  .submit-btn {
+    margin-top: 10px; width: 100%; padding: 8px; background: #f0a020; color: #fff;
+    border: none; border-radius: 4px; font-family: inherit; font-weight: bold;
+    font-size: 10px; letter-spacing: 2px; cursor: pointer;
+    box-shadow: 0 2px 4px rgba(240,160,32,0.35);
+  }
+  .submit-btn:hover { background: #d98c14; }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.6; padding: 7px; }
+
+  /* Materials tab */
+  .mat-totals {
+    background: #ffffff; border: 1.5px solid #ddd; border-top: 4px solid #f0a020;
+    border-radius: 6px; padding: 14px 16px; margin-bottom: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .mat-totals-title { font-size: 10px; letter-spacing: 3px; color: #d98c14; margin-bottom: 14px; font-weight: bold; }
+  .mat-group { margin-bottom: 12px; }
+  .mat-group-label { font-size: 9px; letter-spacing: 2px; margin-bottom: 6px; font-weight: bold; }
+  .mat-cards { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mat-card {
+    background: #ffffff; border-radius: 5px; padding: 10px 14px; min-width: 130px;
+    border: 1.5px solid; border-top: 3px solid; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .mat-card-label { font-size: 9px; letter-spacing: 1px; margin-bottom: 2px; font-weight: bold; }
+  .mat-card-sub { font-size: 8px; color: #999; margin-bottom: 4px; }
+  .mat-card-value { font-size: 26px; font-weight: bold; color: #1a1a2e; line-height: 1; }
+  .mat-card-unit { font-size: 9px; color: #888; margin-top: 2px; }
+  .mat-card-detail {
+    font-size: 9px; color: #888; margin-top: 4px; border-top: 1px solid #eee; padding-top: 4px;
+  }
+  .empty-val { font-size: 9px; color: #bbb; }
+
+  .mat-by-order {
+    background: #ffffff; border: 1.5px solid #ddd; border-top: 4px solid #adb5bd;
+    border-radius: 6px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .mat-by-order-title { font-size: 10px; letter-spacing: 3px; color: #868e96; margin-bottom: 12px; font-weight: bold; }
+  .mat-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 8px;
+  }
+  .mat-order-card {
+    background: #fbfbfd; border-radius: 4px; padding: 10px 12px; border: 1.5px solid; border-left: 4px solid;
+  }
+  .mat-order-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .mat-order-id { font-size: 11px; font-weight: bold; }
+  .mat-order-col { font-size: 9px; color: #999; font-weight: bold; }
+  .mat-order-note { font-size: 10px; color: #555; margin-bottom: 6px; }
+  .mat-warn {
+    font-size: 9px; color: #e03131; background: #fff0f0; border: 1px solid #ffc9c9;
+    border-radius: 3px; padding: 4px 8px; font-weight: bold;
+  }
+  .mat-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .mat-pill {
+    border-radius: 3px; padding: 3px 8px; font-size: 9px; border: 1.5px solid; background: #fff;
+  }
+  .mat-pill .lbl { color: #777; }
+  .mat-pill .val { font-weight: bold; }
+  .mat-pill .sub { color: #bbb; }
+
+  /* History tab */
+  .history-box {
+    background: #ffffff; border: 1.5px solid #ddd; border-top: 4px solid #1c7ed6;
+    border-radius: 6px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .history-head {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+  }
+  .history-title { font-size: 10px; letter-spacing: 3px; color: #1c7ed6; font-weight: bold; }
+  .clear-btn {
+    background: #f1f3f5; border: 1.5px solid #ccc; color: #555; border-radius: 3px;
+    padding: 3px 10px; font-family: inherit; font-size: 9px; letter-spacing: 1px; cursor: pointer; font-weight: bold;
+  }
+  .clear-btn:hover { background: #e9ecef; }
+  .history-list { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+  .history-row {
+    display: flex; gap: 10px; align-items: baseline; font-size: 10px;
+    border-bottom: 1px solid #f1f3f5; padding-bottom: 4px;
+  }
+  .history-ts { color: #aaa; white-space: nowrap; flex: 0 0 auto; }
+  .history-icon { flex: 0 0 14px; font-weight: bold; }
+  .history-msg { color: #333; }
+
+  .footer { text-align: center; margin-top: 14px; font-size: 8px; color: #bbb; letter-spacing: 2px; }
+
+  /* Form carousel tabs */
+  .form-tabs-wrap {
+    display: flex; gap: 4px; background: #fff;
+    border: 1.5px solid #ddd; border-radius: 6px;
+    padding: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .form-tab-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px; padding: 6px 4px; border-radius: 4px; border: 1.5px solid transparent;
+    background: transparent; cursor: pointer; font-family: inherit; transition: all .15s;
+  }
+  .form-tab-btn:hover { background: #f8f9fa; }
+  .form-tab-btn.active {
+    background: #fff; border-color: var(--tab-color, #ccc);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .form-tab-icon { font-size: 14px; line-height: 1; }
+  .form-tab-lbl { font-size: 8px; font-weight: bold; letter-spacing: 0.5px; color: #888; }
+  .form-tab-btn.active .form-tab-lbl { color: var(--tab-color, #333); }
+
+  /* Labeled fields */
+  .lbl-field { display: flex; flex-direction: column; gap: 2px; }
+  .field-lbl { font-size: 8px; color: #888; letter-spacing: 1px; font-weight: bold; text-transform: uppercase; padding-left: 1px; }
+
+  /* Materials sections */
+  .mat-section {
+    background: #fff; border: 1.5px solid #dde1e7; border-radius: 6px;
+    margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden;
+  }
+  .mat-section-header {
+    display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  }
+  .mat-section-icon { font-size: 16px; flex: 0 0 auto; }
+  .mat-section-title {
+    font-size: 11px; font-weight: bold; letter-spacing: 3px; flex: 0 0 auto;
+  }
+  .mat-section-sub {
+    font-size: 9px; color: #888; letter-spacing: 0; font-family: inherit;
+  }
+  .mat-section-body { padding: 14px 16px; }
+
+  /* Revenda */
+  .badge-revenda {
+    display: inline-block; font-size: 8px; font-weight: bold; letter-spacing: 1px;
+    background: #e3fafc; color: #0c8599; border: 1px solid #99e9f2;
+    border-radius: 3px; padding: 1px 6px; margin-bottom: 3px;
+  }
+  .card.revenda { border-left-color: #0c8599 !important; border-color: #99e9f2 !important; }
+  .card-id.revenda-id { color: #0c8599 !important; }
+
+  /* Trilho */
+  .badge-trilho {
+    display: inline-block; font-size: 8px; font-weight: bold; letter-spacing: 1px;
+    background: #fff3e0; color: #b35900; border: 1px solid #ffb366;
+    border-radius: 3px; padding: 1px 6px; margin-bottom: 3px;
+  }
+  .card.trilho { border-left-color: #b35900 !important; border-color: #ffb366 !important; }
+  .card-id.trilho-id { color: #b35900 !important; }
+
+  /* Trilho Extra Pesado */
+  .badge-xp {
+    display: inline-block; font-size: 8px; font-weight: bold; letter-spacing: 1px;
+    background: #f1f3f5; color: #495057; border: 1px solid #adb5bd;
+    border-radius: 3px; padding: 1px 6px; margin-bottom: 3px;
+  }
+  .card.xp { border-left-color: #495057 !important; border-color: #adb5bd !important; }
+  .card-id.xp-id { color: #495057 !important; }
+
+  /* Pista de Roletes */
+  .badge-pista {
+    display: inline-block; font-size: 8px; font-weight: bold; letter-spacing: 1px;
+    background: #ebfbee; color: #2b8a3e; border: 1px solid #8ce99a;
+    border-radius: 3px; padding: 1px 6px; margin-bottom: 3px;
+  }
+  .card.pista { border-left-color: #2b8a3e !important; border-color: #8ce99a !important; }
+  .card-id.pista-id { color: #2b8a3e !important; }
+</style>
+</head>
+<body>
+
+
+<div class="header">
+  <div class="logo">
+    <div class="sub">IPC — PRODUÇÃO</div>
+    <div class="main">PAINEL DE ORDENS</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="kanban">⊞ KANBAN</button>
+    <button class="tab-btn" data-tab="materiais">📐 MATERIAIS</button>
+    <button class="tab-btn" data-tab="historico">🕐 HISTÓRICO (<span id="logCount">0</span>)</button>
+  </div>
+</div>
+
+<!-- ═══ TAB KANBAN ═══ -->
+<div class="tab-content active" id="tab-kanban">
+  <div class="kanban-wrap">
+    <div class="col" id="col-corte" data-col="corte"></div>
+    <div class="col" id="col-usinagem" data-col="usinagem"></div>
+    <div class="col" id="col-montagem" data-col="montagem"></div>
+    <div class="col" id="col-embalagem" data-col="embalagem"></div>
+
+    <div class="side-panel">
+
+      <!-- Seletor de formulário (carrossel) -->
+      <div class="form-tabs-wrap">
+        <button class="form-tab-btn active" data-form="0" id="formTab-0" style="--tab-color:#d98c14">
+          <span class="form-tab-icon">🔩</span>
+          <span class="form-tab-lbl">Rolete</span>
+        </button>
+        <button class="form-tab-btn" data-form="1" id="formTab-1" style="--tab-color:#0c8599">
+          <span class="form-tab-icon">🏷</span>
+          <span class="form-tab-lbl">Revenda</span>
+        </button>
+        <button class="form-tab-btn" data-form="2" id="formTab-2" style="--tab-color:#b35900">
+          <span class="form-tab-icon">🛤</span>
+          <span class="form-tab-lbl">Trilho</span>
+        </button>
+        <button class="form-tab-btn" data-form="3" id="formTab-3" style="--tab-color:#495057">
+          <span class="form-tab-icon">⚙</span>
+          <span class="form-tab-lbl">Trilho XP</span>
+        </button>
+        <button class="form-tab-btn" data-form="4" id="formTab-4" style="--tab-color:#2b8a3e">
+          <span class="form-tab-icon">🏗</span>
+          <span class="form-tab-lbl">Pista</span>
+        </button>
+      </div>
+
+      <!-- ── Formulário 0: Rolete ── -->
+      <div class="panel-box form-panel" id="formPanel-0" style="border-top:3px solid #d98c14;">
+        <div class="panel-title" style="color:#d98c14;">DESCREVA SEU ROLETE</div>
+
+        <input id="newId" placeholder="Nº da ordem (ex: 0320)">
+        <div class="row-flex">
+          <input id="newQty" type="number" min="1" placeholder="Qtd">
+          <input id="newDelivery" type="date" style="flex:2;">
+        </div>
+        <select id="newCol" style="margin-top:5px;">
+          <option value="corte">CORTE</option>
+          <option value="usinagem">USINAGEM</option>
+          <option value="montagem">MONTAGEM</option>
+          <option value="embalagem">EMBALAGEM</option>
+        </select>
+        <div class="section-divider">
+          <div class="section-label" style="color:#d98c14;">MODELO DE ROLETE</div>
+          <select id="modeloSelect"></select>
+        </div>
+        <div>
+          <div class="section-label" style="color:#e07b39;">TUBO (1 por unidade)</div>
+          <div class="row-flex" style="margin-top:0;">
+            <div id="tuboStatic" class="static-val" style="display:flex; flex:2;"></div>
+            <input id="tuboCustom" placeholder="modelo do tubo" style="flex:2; display:none;">
+            <input id="newTuboLen" type="number" min="1" placeholder="corte mm" style="flex:1;">
+          </div>
+          <div class="row-flex" style="margin-top:4px;">
+            <span style="font-size:9px; color:#aaa; display:flex; align-items:center; white-space:nowrap;">barra:</span>
+            <input id="newTuboBarra" type="number" min="1" placeholder="6000" value="6000" style="flex:1;">
+          </div>
+        </div>
+        <div>
+          <div class="section-label" style="color:#c97fff;">EIXO (1 por unidade)</div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+            <input type="checkbox" id="semEixoCheck" style="width:auto; padding:0; margin:0; cursor:pointer;">
+            <label for="semEixoCheck" style="font-size:9px; color:#e03131; font-weight:bold; cursor:pointer; letter-spacing:1px;">SEM EIXO (tubo montado)</label>
+          </div>
+          <div id="eixoFields">
+            <div class="row-flex" style="margin-top:0;">
+              <div id="eixoStatic" class="static-val" style="display:flex; flex:2;"></div>
+              <input id="eixoCustom" placeholder="modelo do eixo" style="flex:2; display:none;">
+              <input id="newEixoLen" type="number" min="1" placeholder="corte mm" style="flex:1;">
+            </div>
+            <div class="row-flex" style="margin-top:4px;">
+              <span style="font-size:9px; color:#aaa; display:flex; align-items:center; white-space:nowrap;">barra:</span>
+              <input id="newEixoBarra" type="number" min="1" placeholder="3000" value="3000" style="flex:1;">
+            </div>
+          </div>
+        </div>
+        <div class="section-divider">
+          <div class="section-label" style="color:#4a9eff; margin-top:0;">COMPONENTES (por unidade)</div>
+          <div id="compRows"></div>
+          <button class="add-comp-btn" id="addCompBtn">+ adicionar componente</button>
+        </div>
+        <button class="submit-btn" id="addOrderBtn">ADICIONAR PEDIDO</button>
+      </div>
+
+      <!-- ── Formulário 1: Revenda ── -->
+      <div class="panel-box form-panel" id="formPanel-1" style="border-top:3px solid #0c8599; display:none;">
+        <div class="panel-title" style="color:#0c8599;">🏷 REVENDA (EMBALAGEM)</div>
+        <input id="revId" placeholder="Nº da ordem (ex: 0320)">
+        <div style="margin-top:5px;">
+          <select id="revProduto">
+            <option value="">— selecione o produto —</option>
+          </select>
+        </div>
+        <input id="revProdutoCustom" placeholder="Especificar produto..." style="margin-top:5px; display:none;">
+        <div class="row-flex">
+          <input id="revQty" type="number" min="1" placeholder="Qtd">
+          <input id="revDelivery" type="date" style="flex:2;">
+        </div>
+        <button class="submit-btn" id="addRevendaBtn" style="background:#0c8599; box-shadow:0 2px 4px rgba(12,133,153,0.3);">
+          ADICIONAR REVENDA
+        </button>
+      </div>
+
+      <!-- ── Formulário 2: Trilho ── -->
+      <div class="panel-box form-panel" id="formPanel-2" style="border-top:3px solid #b35900; display:none;">
+        <div class="panel-title" style="color:#b35900;">🛤 DESCREVA SEU TRILHO</div>
+        <input id="trilhoId" placeholder="Nº da ordem (ex: 0320)">
+        <div style="margin-top:5px;">
+          <div class="section-label" style="color:#b35900; margin-top:0;">TIPO DE TRILHO</div>
+          <select id="trilhoTipo">
+            <option value="">— selecione o trilho —</option>
+            <option value="45kg">45 kg</option>
+            <option value="65kg">65 kg</option>
+            <option value="45kg_aba">45 kg com aba</option>
+            <option value="65kg_aba">65 kg com aba</option>
+          </select>
+        </div>
+        <div style="margin-top:5px;">
+          <div class="section-label" style="color:#b35900; margin-top:4px;">COR DO CARRINHO</div>
+          <select id="trilhoCor">
+            <option value="">— selecione a cor —</option>
+            <option value="Preto">⚫ Preto</option>
+            <option value="Amarelo">🟡 Amarelo</option>
+            <option value="Branco">⚪ Branco</option>
+          </select>
+        </div>
+        <div class="row-flex" style="margin-top:5px;">
+          <input id="trilhoTamanho" type="number" min="1" placeholder="Tamanho peça (mm)">
+          <input id="trilhoQty" type="number" min="1" placeholder="Qtd">
+        </div>
+        <div style="margin-top:5px;">
+          <div class="section-label" style="color:#b35900; margin-top:4px;">TAMANHO DA BARRA (mm)</div>
+          <input id="trilhoBarra" type="number" min="1" placeholder="4000" value="4000">
+        </div>
+        <input id="trilhoDelivery" type="date" style="margin-top:5px;">
+        <button class="submit-btn" id="addTrilhoBtn" style="background:#b35900; box-shadow:0 2px 4px rgba(179,89,0,0.3);">
+          ADICIONAR TRILHO
+        </button>
+      </div>
+
+      <!-- ── Formulário 3: Trilho XP ── -->
+      <div class="panel-box form-panel" id="formPanel-3" style="border-top:3px solid #495057; display:none;">
+        <div class="panel-title" style="color:#495057;">⚙ DESCREVA SEU TRILHO EXTRA PESADO</div>
+        <input id="xpId" placeholder="Nº da ordem (ex: 0320)">
+        <div style="margin-top:5px;">
+          <div class="section-label" style="color:#495057; margin-top:0;">MATERIAL DO RODÍZIO</div>
+          <select id="xpMaterial">
+            <option value="">— selecione o material —</option>
+            <option value="Aço">⚙ Aço</option>
+            <option value="Nylon">⚪ Nylon</option>
+          </select>
+        </div>
+        <div class="row-flex" style="margin-top:5px;">
+          <input id="xpTamanho" type="number" min="1" placeholder="Tamanho peça (mm)">
+          <input id="xpQty" type="number" min="1" placeholder="Qtd">
+        </div>
+        <div style="margin-top:5px;">
+          <div class="section-label" style="color:#495057; margin-top:4px;">TAMANHO DA BARRA (mm)</div>
+          <input id="xpBarra" type="number" min="1" placeholder="2300" value="2300">
+        </div>
+        <input id="xpDelivery" type="date" style="margin-top:5px;">
+        <button class="submit-btn" id="addXpBtn" style="background:#495057; box-shadow:0 2px 4px rgba(73,80,87,0.3);">
+          ADICIONAR TRILHO XP
+        </button>
+      </div>
+
+      <!-- ── Formulário 4: Pista ── -->
+      <div class="panel-box form-panel" id="formPanel-4" style="border-top:3px solid #2b8a3e; display:none;">
+        <div class="panel-title" style="color:#2b8a3e;">🏗 PISTA DE ROLETES</div>
+        <div class="lbl-field">
+          <label class="field-lbl">Nº da ordem</label>
+          <input id="pistaId" placeholder="ex: 0320">
+        </div>
+        <div class="row-flex" style="margin-top:6px;">
+          <div class="lbl-field" style="flex:1;">
+            <label class="field-lbl">Quantidade de pistas</label>
+            <input id="pistaQty" type="number" min="1" placeholder="1">
+          </div>
+          <div class="lbl-field" style="flex:2;">
+            <label class="field-lbl">Data de entrega</label>
+            <input id="pistaDelivery" type="date">
+          </div>
+        </div>
+        <div style="margin-top:12px; background:#f4fbf5; border:1.5px solid #8ce99a; border-radius:5px; padding:10px;">
+          <div style="font-size:9px; font-weight:bold; color:#2b8a3e; letter-spacing:2px; margin-bottom:8px;">✂ MEDIDAS DE CORTE</div>
+          <div class="lbl-field">
+            <label class="field-lbl">Comprimento da longarina <span style="color:#999;">(2 por pista)</span></label>
+            <input id="pistaTamanho" type="number" min="1" placeholder="ex: 1000">
+          </div>
+          <div class="lbl-field" style="margin-top:6px;">
+            <label class="field-lbl">Comprimento do tubo do rolete</label>
+            <div style="display:flex; gap:5px; align-items:center;">
+              <input id="pistaTuboLen" type="number" min="1" placeholder="ex: 300" style="flex:2;">
+              <select id="pistaMaterialRolete" style="flex:1;">
+                <option value="Aço">Aço</option>
+                <option value="PVC">PVC</option>
+              </select>
+            </div>
+          </div>
+          <div class="row-flex" style="margin-top:6px; gap:8px;">
+            <div class="lbl-field" style="flex:1;">
+              <label class="field-lbl">Eixo roscado</label>
+              <div style="font-size:10px; color:#555; font-weight:bold; padding:5px 8px; background:#f8f9fb; border:1.5px solid #d8dce3; border-radius:4px;">M8 (fixo)</div>
+            </div>
+            <div class="lbl-field" style="flex:1;">
+              <label class="field-lbl">Passo entre roletes</label>
+              <select id="pistaPasso">
+                <option value="55">55 mm</option>
+                <option value="110">110 mm</option>
+                <option value="165">165 mm</option>
+                <option value="220">220 mm</option>
+                <option value="275">275 mm</option>
+                <option value="330">330 mm</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="pistaTemPe" style="width:auto; padding:0; margin:0; cursor:pointer;" checked>
+            <label for="pistaTemPe" style="font-size:9px; color:#2b8a3e; font-weight:bold; cursor:pointer;">POSSUI PÉ ESTRUTURAL</label>
+          </div>
+        </div>
+        <div style="margin-top:10px; background:#f8f9fa; border:1.5px solid #dee2e6; border-radius:5px; padding:10px;">
+          <div style="font-size:9px; font-weight:bold; color:#495057; letter-spacing:2px; margin-bottom:8px;">📦 TAMANHO DAS BARRAS INTEIRAS</div>
+          <div class="row-flex" style="gap:8px;">
+            <div class="lbl-field" style="flex:1;">
+              <label class="field-lbl">Barra da longarina</label>
+              <input id="pistaBarra" type="number" min="1" value="3000">
+            </div>
+            <div class="lbl-field" style="flex:1;">
+              <label class="field-lbl">Barra do tubo</label>
+              <input id="pistaEixoBarraTubo" type="number" min="1" value="6000">
+            </div>
+          </div>
+          <div class="row-flex" style="gap:8px; margin-top:6px;">
+            <div class="lbl-field" style="flex:1;">
+              <label class="field-lbl">Barra eixo roscado M8</label>
+              <input id="pistaEixoBarraEixo" type="number" min="1" value="3000">
+            </div>
+            <div class="lbl-field" style="flex:1;">
+              <label class="field-lbl">Barra eixo estrutural Ø15</label>
+              <input id="pistaEixoEstBarraLen" type="number" min="1" value="2500">
+            </div>
+          </div>
+          <div id="pistaCantoneiraSec">
+            <div class="lbl-field" style="margin-top:6px;">
+              <label class="field-lbl">Barra da cantoneira estrutural</label>
+              <input id="pistaCantoneiraBarra" type="number" min="1" value="6000">
+            </div>
+          </div>
+          <div style="font-size:8px; color:#aaa; margin-top:6px; line-height:1.5;">
+            Eixo estrutural = tubo + 24mm &nbsp;·&nbsp; Cantoneira = tubo + 90mm
+          </div>
+        </div>
+        <div id="pistaPreview" style="background:#f1f8f3; border:1px solid #8ce99a; border-radius:4px; padding:8px; margin-top:8px; font-size:9px; color:#2b8a3e; line-height:1.7; display:none;"></div>
+        <button class="submit-btn" id="addPistaBtn" style="background:#2b8a3e; box-shadow:0 2px 4px rgba(43,138,62,0.3); margin-top:10px;">
+          ADICIONAR PISTA
+        </button>
+      </div>
+
+      <!-- Anotações (sempre visível) -->
+      <div class="panel-box" style="border-top:3px solid #adb5bd;">
+        <div class="panel-title" style="color:#666;">📝 ANOTAÇÕES</div>
+        <textarea id="memo" placeholder="Observações, recados, pendências..."></textarea>
+      </div>
+
+    </div>
+
+  </div><!-- end kanban-wrap -->
+</div><!-- end tab-kanban -->
+
+<!-- ═══ TAB MATERIAIS ═══ -->
+<div class="tab-content" id="tab-materiais">
+
+  <div style="font-size:9px; color:#888; margin-bottom:12px; line-height:1.6; background:#fff; border:1.5px solid #e2e5ea; border-radius:6px; padding:10px 14px;">
+    Fórmula: <strong>floor(barra ÷ corte) = cortes/barra</strong> → <strong>ceil(quantidade ÷ cortes/barra) = barras necessárias</strong>
+  </div>
+
+  <!-- ── LEVANTAMENTO DE ESTOQUE ── -->
+  <div class="mat-section" style="border-top:4px solid #2b8a3e; margin-bottom:12px;">
+    <div class="mat-section-header" style="background:#ebfbee; border-bottom:1.5px solid #8ce99a;">
+      <span class="mat-section-icon">∑</span>
+      <span class="mat-section-title" style="color:#2b8a3e;">LEVANTAMENTO DE ESTOQUE</span>
+      <span class="mat-section-sub">totais para abastecer todos os pedidos ativos</span>
+    </div>
+    <div class="mat-section-body" id="globalCards"></div>
+  </div>
+
+  <!-- IDs mantidos ocultos para o JS dos outros renders -->
+  <div style="display:none;">
+    <div id="tuboCards"></div><div id="eixoCards"></div><div id="compCards"></div>
+    <div id="pistaCards"></div><div id="trilhoCards"></div><div id="carrinhoCards"></div>
+    <div id="xpBarraCards"></div><div id="xpRodizioCards"></div><div id="matTitle"></div>
+  </div>
+
+  <!-- ── DETALHAMENTO POR PEDIDO ── -->
+  <div class="mat-section" style="border-top:4px solid #868e96;">
+    <div class="mat-section-header" style="background:#f8f9fa; border-bottom:1.5px solid #dee2e6;">
+      <span class="mat-section-icon">📋</span>
+      <span class="mat-section-title" style="color:#495057;">DETALHAMENTO POR PEDIDO</span>
+      <span class="mat-section-sub">materiais específicos de cada ordem</span>
+    </div>
+    <div class="mat-section-body">
+      <div class="mat-grid" id="matByOrder"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB HISTÓRICO ═══ -->
+<div class="tab-content" id="tab-historico">
+  <div class="history-box">
+    <div class="history-head">
+      <span class="history-title">🕐 HISTÓRICO DE ALTERAÇÕES</span>
+      <button class="clear-btn" id="clearLogBtn">LIMPAR</button>
+    </div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<div class="footer">IPC — PAINEL DE PRODUÇÃO</div>
+
+<script>
+/* ════════════════════ DADOS ════════════════════ */
+
+const COLS = [
+  { id: "corte",     label: "✂ CORTE",     color: "#d9480f", bg: "#fff4e6" },
+  { id: "usinagem",  label: "🔩 USINAGEM",  color: "#9c36b5", bg: "#f8f0fc" },
+  { id: "montagem",  label: "⚙ MONTAGEM",  color: "#1864ab", bg: "#e7f5ff" },
+  { id: "embalagem", label: "📦 EMBALAGEM", color: "#2b8a3e", bg: "#ebfbee" },
+];
+const COL_MAP = Object.fromEntries(COLS.map(c => [c.id, c]));
+const COL_LABELS = { corte: "CORTE", usinagem: "USINAGEM", montagem: "MONTAGEM", embalagem: "EMBALAGEM" };
+
+const TUBO_BARRA = 6000; // mm por barra padrão
+const EIXO_BARRA = 3000; // mm por barra padrão
+
+const MODELOS_ROLETE = [
+  {
+    id: "eng_simples_aco", desc: "Rolete com engrenagem simples (aço)",
+    tubo: "Tubo aço 50", eixo: "Eixo 12 liso",
+    componentes: [
+      { nome: "Mancal 1,5 p/engrenagem", qtd: 2 },
+      { nome: "Engrenagem simples/aço", qtd: 1 },
+      { nome: "Rolamento 6201", qtd: 2 },
+      { nome: "Tampa 12 engrenagem", qtd: 2 },
+    ],
+  },
+  {
+    id: "eng_simples_pvc", desc: "Rolete com engrenagem simples (PVC)",
+    tubo: "Tubo PVC 50", eixo: "Eixo 12 liso",
+    componentes: [
+      { nome: "Mancal 2,0 p/engrenagem", qtd: 2 },
+      { nome: "Engrenagem simples/PVC", qtd: 1 },
+      { nome: "Rolamento 6201", qtd: 2 },
+      { nome: "Tampa 12 engrenagem", qtd: 2 },
+    ],
+  },
+  {
+    id: "eng_dupla_aco", desc: "Rolete com engrenagem dupla (aço)",
+    tubo: "Tubo aço 50", eixo: "Eixo 12 liso",
+    componentes: [
+      { nome: "Mancal 1,5 p/engrenagem", qtd: 2 },
+      { nome: "Engrenagem dupla/aço", qtd: 1 },
+      { nome: "Rolamento 6201", qtd: 2 },
+      { nome: "Tampa 12 engrenagem", qtd: 2 },
+    ],
+  },
+  {
+    id: "eng_dupla_pvc", desc: "Rolete com engrenagem dupla (PVC)",
+    tubo: "Tubo PVC 50", eixo: "Eixo 12 liso",
+    componentes: [
+      { nome: "Mancal 2,0 p/engrenagem", qtd: 2 },
+      { nome: "Engrenagem dupla/PVC", qtd: 1 },
+      { nome: "Rolamento 6201", qtd: 2 },
+      { nome: "Tampa 12 engrenagem", qtd: 2 },
+    ],
+  },
+  {
+    id: "carga_76", desc: "Rolete de carga 76",
+    tubo: "Tubo aço 76", eixo: "Eixo 20 liso",
+    componentes: [
+      { nome: "Mancal 76 (6204)", qtd: 2 },
+      { nome: "Rolamento 6204", qtd: 2 },
+    ],
+  },
+  {
+    id: "carga_889", desc: "Rolete de carga 88,9",
+    tubo: "Tubo aço 88,9", eixo: "Eixo 20 liso",
+    componentes: [
+      { nome: "Mancal 88,9 (6204)", qtd: 2 },
+      { nome: "Rolamento 6204", qtd: 2 },
+    ],
+  },
+  {
+    id: "carga_101", desc: "Rolete de carga 101",
+    tubo: "Tubo aço 101", eixo: "Eixo 20 liso",
+    componentes: [
+      { nome: "Mancal 101 (6204)", qtd: 2 },
+      { nome: "Rolamento 6204", qtd: 2 },
+    ],
+  },
+  {
+    id: "aco_60", desc: "Rolete de aço 60 mm",
+    tubo: "Tubo aço 60", eixo: "Eixo M12 roscado aço",
+    componentes: [
+      { nome: "Mancal 60 (6202)", qtd: 2 },
+      { nome: "Rolamento 6202", qtd: 2 },
+      { nome: "Porca M12 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 12", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  {
+    id: "aco_63", desc: "Rolete de aço 63 mm",
+    tubo: "Tubo aço 63", eixo: "Eixo M12 roscado aço",
+    componentes: [
+      { nome: "Mancal 63 (6202)", qtd: 2 },
+      { nome: "Rolamento 6202", qtd: 2 },
+      { nome: "Porca M12 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 12", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  {
+    id: "aco_76m12", desc: "Rolete de aço 76 mm",
+    tubo: "Tubo aço 76", eixo: "Eixo M12 roscado aço",
+    componentes: [
+      { nome: "Mancal 76 (6202)", qtd: 2 },
+      { nome: "Rolamento 6202", qtd: 2 },
+      { nome: "Porca M12 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 12", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  {
+    id: "pvc_75", desc: "Rolete PVC 75 mm",
+    tubo: "Tubo PVC 75", eixo: "Eixo M12 roscado aço",
+    componentes: [
+      { nome: "Mancal 76 (6202)", qtd: 2 },
+      { nome: "Rolamento 6202", qtd: 2 },
+      { nome: "Porca M12 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 12", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  {
+    id: "aco_31", desc: "Rolete de aço de 31 mm",
+    tubo: "Tubo aço 31", eixo: "Eixo M8 roscado aço",
+    componentes: [
+      { nome: "Mancal 31", qtd: 2 },
+      { nome: "Rolamento 6000", qtd: 2 },
+      { nome: "Porca M8 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 31", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  {
+    id: "aco_38", desc: "Rolete de aço 38 mm",
+    tubo: "Tubo aço 38", eixo: "Eixo M8 roscado aço",
+    componentes: [
+      { nome: "Mancal 38", qtd: 2 },
+      { nome: "Rolamento 6201", qtd: 2 },
+      { nome: "Porca M8 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 38", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  {
+    id: "aco_50m8", desc: "Rolete de aço 50 mm",
+    tubo: "Tubo aço 50", eixo: "Eixo M8 roscado aço",
+    componentes: [
+      { nome: "Mancal 1,5", qtd: 2 },
+      { nome: "Rolamento 6202", qtd: 2 },
+      { nome: "Porca M8 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 8", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  {
+    id: "pvc_50", desc: "Rolete PVC 50 mm",
+    tubo: "Tubo PVC 50", eixo: "Eixo M8 roscado aço",
+    componentes: [
+      { nome: "Mancal 2,0", qtd: 2 },
+      { nome: "Rolamento 6202", qtd: 2 },
+      { nome: "Porca M8 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 8", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  {
+    id: "pvc_40", desc: "Rolete PVC 40 mm",
+    tubo: "Tubo PVC 40", eixo: "Eixo M8 roscado aço",
+    componentes: [
+      { nome: "Mancal 42", qtd: 2 },
+      { nome: "Rolamento 6201", qtd: 2 },
+      { nome: "Porca M8 sextavada", qtd: 2 },
+      { nome: "Mola M12", qtd: 1 },
+      { nome: "Tampa 8", qtd: 2 },
+      { nome: "Parlock M8", qtd: 2 },
+    ],
+  },
+  { id: "custom", desc: "Personalizado (sem template)", tubo: "", eixo: "", componentes: [] },
+];
+const MODELO_MAP = Object.fromEntries(MODELOS_ROLETE.map(m => [m.id, m]));
+
+const COMPONENTES_LISTA = [...new Set(
+  MODELOS_ROLETE.flatMap(m => m.componentes.map(c => c.nome))
+)].sort();
+
+// ── Produtos de revenda (sem corte/montagem → vão direto p/ Embalagem) ──
+const PRODUTOS_REVENDA = [
+  // Esferas de aço (código - capacidade)
+  "Esfera de aço 425 - 38kg",
+  "Esfera de aço 431 - 20kg",
+  "Esfera de aço 432 - 20kg",
+  "Esfera de aço 435 - 20kg",
+  "Esfera de aço 439 - 60kg",
+  "Esfera de aço 441 - 50kg",
+  "Esfera de aço 441 - 120kg",
+  "Esfera de aço 442 - 50kg",
+  "Esfera de aço 442 - 120kg",
+  "Esfera de aço 443 - 50kg",
+  "Esfera de aço 444 - 35kg",
+  "Esfera de aço 445 - 20kg",
+  "Esfera de aço 446 - 20kg",
+  "Esfera de aço 447 - 35kg",
+  "Esfera de aço 448 - 35kg",
+  "Esfera de aço 449 - 300kg",
+  "Esfera de aço 450 - 200kg",
+  "Esfera de aço 451 - 200kg",
+  "Esfera de aço 453 - 200kg",
+  // Sapatas base 60
+  "Sapata base 60 rosca 8",
+  "Sapata base 60 rosca 10",
+  "Sapata base 60 rosca 12",
+  "Sapata base 60 rosca 14",
+  "Sapata base 60 rosca 16",
+  // Sapatas base 80
+  "Sapata base 80 rosca 8",
+  "Sapata base 80 rosca 10",
+  "Sapata base 80 rosca 12",
+  "Sapata base 80 rosca 14",
+  "Sapata base 80 rosca 16",
+  "Sapata base 80 rosca 20",
+  // Sapatas base 100
+  "Sapata base 100 rosca 10",
+  "Sapata base 100 rosca 12",
+  "Sapata base 100 rosca 14",
+  "Sapata base 100 rosca 16",
+  "Sapata base 100 rosca 20",
+  // Outros
+  "Outro (especificar)",
+];
+const STORAGE_KEY = "ipc_kanban_state_v3";
+
+// Safari/iOS bloqueia localStorage em file:// — fallback em memória
+let _storage = {};
+const safeStorage = {
+  getItem: function(k) {
+    try { return localStorage.getItem(k); } catch(e) { return _storage[k] || null; }
+  },
+  setItem: function(k, v) {
+    try { localStorage.setItem(k, v); } catch(e) { _storage[k] = v; }
+  }
+};
+
+const now = () => new Date().toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+const fmtDate = (d) => { if (!d) return null; const [y,m,day] = d.split("-"); return `${day}/${m}`; };
+const isLate  = (d) => d && new Date(d) < new Date();
+const uid = () => Math.random().toString(36).slice(2);
+
+function buildOrderFromModelo(modeloId, qty, tuboLen, eixoLen) {
+  const m = MODELO_MAP[modeloId] || MODELOS_ROLETE[0];
+  return {
+    tubo: m.tubo, eixo: m.eixo,
+    tubo_len: tuboLen || null,
+    eixo_len: eixoLen || null,
+    componentes: m.componentes.map(c => ({ ...c })),
+    note: m.desc,
+  };
+}
+
+let state = loadState();
+
+function defaultState() {
+  return {
+    orders: [
+      { id: "OP-0318", col: "corte", qty: 25, delivery: "2026-06-20",
+        ...buildOrderFromModelo("aco_60", 25, 300, 300) },
+      { id: "OP-0314", col: "corte", qty: 30, delivery: "2026-06-22",
+        ...buildOrderFromModelo("pvc_50", 30, 400, 400) },
+    ],
+    log: [{ ts: now(), msg: "Sistema iniciado com pedidos de exemplo.", type: "info" }],
+    memo: "",
+  };
+}
+
+function loadState() {
+  try {
+    const raw = safeStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    if (!parsed.orders || !parsed.log) return defaultState();
+    return parsed;
+  } catch (e) {
+    return defaultState();
+  }
+}
+
+function saveState() {
+  try { safeStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function addLog(msg, type = "move") {
+  state.log.unshift({ ts: now(), msg, type });
+  saveState();
+}
+
+/* ════════════════════ CÁLCULO DE MATERIAIS ════════════════════ */
+
+// First Fit Decreasing: empacota peças (maior pro menor) em barras de tamanho fixo.
+// Cada peça vem de UMA barra só (sem emenda). Retorna nº de barras e sobras.
+function packBars(pieces, barSize) {
+  // pieces: array de comprimentos em mm (1 entrada por peça individual)
+  const sorted = [...pieces].sort((a, b) => b - a);
+  const bars = []; // cada item = espaço restante na barra
+
+  for (const piece of sorted) {
+    if (piece > barSize) {
+      // peça maior que a barra: não cabe em nenhuma barra — marca como problema
+      bars.push({ remaining: 0, overflow: piece - barSize });
+      continue;
+    }
+    // procura a barra com menor sobra que ainda comporte a peça (best fit)
+    let bestIdx = -1, bestRemaining = Infinity;
+    for (let i = 0; i < bars.length; i++) {
+      if (bars[i].remaining >= piece && bars[i].remaining < bestRemaining) {
+        bestIdx = i; bestRemaining = bars[i].remaining;
+      }
+    }
+    if (bestIdx >= 0) {
+      bars[bestIdx].remaining -= piece;
+    } else {
+      bars.push({ remaining: barSize - piece });
+    }
+  }
+
+  const totalSobra = bars.reduce((s, b) => s + (b.remaining || 0), 0);
+  const overflowCount = bars.filter(b => b.overflow).length;
+  return { barras: bars.length, sobra: totalSobra, sobras: bars.map(b => b.remaining || 0), overflowCount };
+}
+
+function calcMateriais(orders) {
+  const trilhoOrders = orders.filter(o => o.trilho);
+  const xpOrders     = orders.filter(o => o.xp);
+  const pistaOrders  = orders.filter(o => o.pista);
+  orders = orders.filter(o => !o.revenda && !o.trilho && !o.xp && !o.pista);
+
+  const porPedido = orders.map(o => {
+    const qty = o.qty || 0;
+    const compTubo = o.tubo_len || 0;
+    const compEixo = o.eixo_len || 0;
+    const totalTuboMm = qty * compTubo;
+    const totalEixoMm = qty * compEixo;
+    const compTotals = (o.componentes || []).map(c => ({ nome: c.nome, total: c.qtd * qty }));
+    return { id: o.id, qty, totalTuboMm, totalEixoMm, tubo_len: compTubo, eixo_len: compEixo, tubo: o.tubo, eixo: o.eixo, compTotals };
+  });
+
+  // ── Cálculo simples: floor(barra / corte) = cortes por barra; ceil(qty / cortes) = barras ──
+  function simpleCalc(qty, corte, barra) {
+    if (!qty || !corte || !barra) return null;
+    const cortesPorBarra = Math.floor(barra / corte);
+    if (cortesPorBarra === 0) return { barras: qty, cortesPorBarra: 0, sobra: 0, aviso: true };
+    const barras = Math.ceil(qty / cortesPorBarra);
+    const sobra  = (barras * cortesPorBarra - qty) * corte; // mm de sobra
+    return { barras, cortesPorBarra, sobra };
+  }
+
+  // Agrupa tubo/eixo por modelo+barra (chave composta para suportar barras diferentes)
+  const tuboMap  = {}; // { "Tubo aço 60|6000": { modelo, barraSize, qty, corte } }
+  const eixoMap  = {};
+
+  porPedido.forEach(p => {
+    if (p.tubo && p.tubo_len > 0 && p.qty > 0) {
+      const order = orders.find(o => o.id === p.id);
+      const barra = (order && order.tubo_barra) || TUBO_BARRA;
+      const key   = `${p.tubo}|${barra}`;
+      if (!tuboMap[key]) tuboMap[key] = { modelo: p.tubo, barra, qty: 0, corte: p.tubo_len };
+      tuboMap[key].qty += p.qty;
+    }
+    if (p.eixo && p.eixo_len > 0 && p.qty > 0) {
+      const order = orders.find(o => o.id === p.id);
+      const barra = (order && order.eixo_barra) || EIXO_BARRA;
+      const key   = `${p.eixo}|${barra}`;
+      if (!eixoMap[key]) eixoMap[key] = { modelo: p.eixo, barra, qty: 0, corte: p.eixo_len };
+      eixoMap[key].qty += p.qty;
+    }
+  });
+
+  const tuboPorModelo = {}; // filled after pista aggregation below
+  const eixoPorModelo = {}; // filled after pista aggregation below
+
+  // barras por pedido (para o detalhamento)
+  porPedido.forEach(p => {
+    const order = orders.find(o => o.id === p.id);
+    if (p.tubo && p.tubo_len > 0 && p.qty > 0) {
+      const barra = (order && order.tubo_barra) || TUBO_BARRA;
+      const c = simpleCalc(p.qty, p.tubo_len, barra);
+      p.bTubo = c ? c.barras : 0;
+    } else p.bTubo = 0;
+    if (p.eixo && p.eixo_len > 0 && p.qty > 0) {
+      const barra = (order && order.eixo_barra) || EIXO_BARRA;
+      const c = simpleCalc(p.qty, p.eixo_len, barra);
+      p.bEixo = c ? c.barras : 0;
+    } else p.bEixo = 0;
+  });
+
+  const compMap = {};
+  porPedido.forEach(p => p.compTotals.forEach(c => {
+    compMap[c.nome] = (compMap[c.nome] || 0) + c.total;
+  }));
+
+  // ── Trilhos: cálculo simples por tipo ──
+  const trilhoPorTipo = {};
+  const carrinhosPorCor = {};
+
+  trilhoOrders.forEach(o => {
+    const qty     = o.qty || 0;
+    const corte   = o.trilho_tamanho || 0;
+    const barra   = o.trilho_barra || 4000;
+    const tipo    = o.trilho_tipo_label || o.trilho_tipo;
+    const cor     = o.trilho_cor;
+
+    if (corte > 0 && qty > 0) {
+      const key  = `${tipo}|${barra}`;
+      if (!trilhoPorTipo[key]) trilhoPorTipo[key] = { tipo, barra, qty: 0, corte };
+      trilhoPorTipo[key].qty += qty;
+
+      const carrinhosPorPeca = Math.ceil(corte / 1000) * 3;
+      carrinhosPorCor[cor] = (carrinhosPorCor[cor] || 0) + qty * carrinhosPorPeca;
+    }
+  });
+
+  // aplica cálculo simples em cada tipo de trilho
+  Object.keys(trilhoPorTipo).forEach(key => {
+    const t = trilhoPorTipo[key];
+    const calc = simpleCalc(t.qty, t.corte, t.barra);
+    trilhoPorTipo[key] = { ...t, ...calc };
+  });
+
+  // ── Cálculo trilho extra pesado: bin packing + rodízios (passo 55mm) ──
+  const xpPecasPorBarra = {};
+  const xpRodiziosPorMaterial = {}; // { "Aço": 27, "Nylon": 0 } — só rodízios
+  const xpFixos = { "Parlock M8": 0, "Arruela M8": 0, "Parafuso M8×40": 0 };
+
+  xpOrders.forEach(o => {
+    const qty     = o.qty || 0;
+    const tam     = o.xp_tamanho || 0;
+    const barSize = o.xp_barra || 2300;
+    const mat_    = o.xp_material;
+    const barKey  = `Barra ${barSize}mm`;
+
+    if (tam > 0 && qty > 0) {
+      xpPecasPorBarra[barKey] = xpPecasPorBarra[barKey] || { pecas: [], barSize };
+      for (let i = 0; i < qty; i++) xpPecasPorBarra[barKey].pecas.push(tam);
+
+      const rodPorPeca = o.xp_rod_por_peca || Math.floor(tam / 55);
+      const totalComp  = rodPorPeca * qty;
+      xpRodiziosPorMaterial[mat_]     = (xpRodiziosPorMaterial[mat_] || 0) + totalComp;
+      xpFixos["Parlock M8"]           += totalComp;
+      xpFixos["Arruela M8"]           += totalComp;
+      xpFixos["Parafuso M8×40"]       += totalComp;
+    }
+  });
+
+  const xpBarras = {};
+  Object.entries(xpPecasPorBarra).forEach(([key, { pecas, barSize }]) => {
+    // XP: todos os cortes têm o mesmo tamanho dentro do pedido, usa simpleCalc
+    const corte = pecas[0]; // todos iguais por pedido
+    const calc  = simpleCalc(pecas.length, corte, barSize);
+    xpBarras[key] = calc
+      ? { ...calc, corte, barSize, qtdPecas: pecas.length }
+      : { barras: pecas.length, corte, barSize, qtdPecas: pecas.length, cortesPorBarra: 1, sobra: 0 };
+  });
+
+  // ── Pista de Roletes ──
+  const pistaAgg = [];
+  pistaOrders.forEach(o => {
+    const qty   = o.qty || 1;
+    const c     = calcPista(o.pista_tamanho||0, o.pista_passo||55, o.pista_tubo_len||0, qty, o.pista_tem_pe);
+    o.pista_calc = c;
+    pistaAgg.push({ id: o.id, qty, c, order: o });
+
+    const tuboLen = o.pista_tubo_len || 0;
+    const nTubos  = c.totalRoletes;
+
+    // Tubos e eixos roscados da pista → mesmos nomes dos modelos de rolete avulso
+    if (tuboLen > 0 && nTubos > 0) {
+      const mat_ = o.pista_mat_rolete || "Aço";
+      // Usa o mesmo nome exato do modelo de tubo (ex: "Tubo aço 50", "Tubo PVC 50")
+      const tuboModelo = mat_ === "PVC" ? "Tubo PVC 50" : "Tubo aço 50";
+      const barraTubo  = o.pista_tubo_barra || 6000;
+      const keyT = `${tuboModelo}|${barraTubo}`;
+      if (!tuboMap[keyT]) tuboMap[keyT] = { modelo: tuboModelo, barra: barraTubo, qty: 0, corte: tuboLen };
+      tuboMap[keyT].qty += nTubos;
+
+      // Eixo roscado M8 — mesmo nome dos roletes avulsos
+      const eixoModelo = "Eixo M8 roscado aço";
+      const barraEixo  = o.pista_eixo_barra || 3000;
+      const keyE = `${eixoModelo}|${barraEixo}`;
+      if (!eixoMap[keyE]) eixoMap[keyE] = { modelo: eixoModelo, barra: barraEixo, qty: 0, corte: tuboLen };
+      eixoMap[keyE].qty += nTubos;
+    }
+  });
+
+  // Recalcula tuboPorModelo e eixoPorModelo com entradas da pista
+  Object.entries(tuboMap).forEach(([key, { modelo, barra, qty: q, corte }]) => {
+    const calc = simpleCalc(q, corte, barra);
+    tuboPorModelo[key] = { modelo, barra, qty: q, corte, ...calc };
+  });
+  Object.entries(eixoMap).forEach(([key, { modelo, barra, qty: q, corte }]) => {
+    const calc = simpleCalc(q, corte, barra);
+    eixoPorModelo[key] = { modelo, barra, qty: q, corte, ...calc };
+  });
+
+  // ── TOTAL GERAL — soma tudo com nomes exatamente iguais entre tipos ──
+  const globalTotals = {};
+  const addG = (nome, qty) => { if (qty > 0) globalTotals[nome] = (globalTotals[nome] || 0) + qty; };
+
+  // 1. TUBOS — total de barras por modelo (roletes avulsos + roletes da pista)
+  Object.entries(tuboPorModelo).forEach(([, info]) => {
+    if (info && info.barras > 0) addG(`Tubo ${info.modelo}`, info.barras);
+  });
+
+  // 2. EIXOS — total de barras por modelo
+  Object.entries(eixoPorModelo).forEach(([, info]) => {
+    if (info && info.barras > 0) addG(`Eixo ${info.modelo}`, info.barras);
+  });
+
+  // 3. COMPONENTES DOS ROLETES AVULSOS (mancais, rolamentos, porcas, molas, parlocks, tampas)
+  Object.entries(compMap).forEach(([nome, total]) => addG(nome, total));
+
+  // 4. ROLETES DA PISTA — mesmos componentes de um rolete roscado M8 avulso
+  // (Mancal, Rolamento, Porca M8 sextavada ×2, Mola M12, Tampa, Parlock M8 ×2)
+  // O modelo padrão da pista usa os mesmos nomes dos modelos roscados
+  pistaAgg.forEach(({ c, order: o }) => {
+    const nR = c.totalRoletes;
+    if (nR <= 0) return;
+    const mat = o.pista_mat_rolete || "Aço";
+
+    // Componentes por rolete — baseado no modelo de rolete da pista
+    // Usa os mesmos nomes exatos que os modelos de rolete roscado M8
+    const mancalNome = mat === "PVC" ? "Mancal 2,0" : "Mancal 1,5"; // default pista 50mm
+    addG(mancalNome,            nR * 1);
+    addG("Rolamento 6202",      nR * 1);
+    addG("Porca M8 sextavada",  nR * 2);
+    addG("Mola M12",            nR * 1);
+    addG("Tampa 8",             nR * 1);
+    addG("Parlock M8",          nR * 2); // fixação na longarina (substitui Parlock do eixo roscado)
+
+    // Eixo estrutural da pista: porca M8 sextavada + arruela M8 (2 de cada lado)
+    addG("Porca M8 sextavada",  c.totalEixosEst * 2);
+    addG("Arruela M8",          c.totalEixosEst * 2);
+
+    // Pés estruturais
+    if (c.totalPes > 0) {
+      addG("Parafuso M8×16",    c.totalPes * 8);
+      addG("Arruela M8",        c.totalPes * 8);
+      addG("Porca M8 sextavada",c.totalPes * 8);
+      addG("Porca M12 sextavada",c.totalPes * 4);
+      addG("Arruela M12",       c.totalPes * 4);
+      addG("Sapata M12",        c.totalPes * 2);
+      addG("Sorriso",           c.totalPes * 2);
+      addG("Cantoneira 40×40",  c.totalPes * 2);
+    }
+  });
+
+  // 5. TRILHO XP — parlock M8, arruela M8, parafuso M8×40, rodízios
+  addG("Parlock M8",       xpFixos["Parlock M8"]     || 0);
+  addG("Arruela M8",       xpFixos["Arruela M8"]     || 0);
+  addG("Parafuso M8×40",   xpFixos["Parafuso M8×40"] || 0);
+  Object.entries(xpRodiziosPorMaterial).forEach(([mat_, total]) =>
+    addG(`Rodízio ${mat_} (XP)`, total)
+  );
+
+  return { porPedido, tuboPorModelo, eixoPorModelo, compMap, trilhoPorTipo, carrinhosPorCor, xpBarras, xpRodiziosPorMaterial, xpFixos, globalTotals, pistaAgg };
+}
+
+/* ════════════════════ RENDER: KANBAN ════════════════════ */
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+
+function renderKanban() {
+  COLS.forEach(col => {
+    const colOrders = state.orders.filter(o => o.col === col.id);
+    const wrap = document.getElementById(`col-${col.id}`);
+    wrap.style.background = col.bg;
+    wrap.style.borderColor = col.color + "55";
+    wrap.style.borderTop = `4px solid ${col.color}`;
+    wrap.dataset.colColor = col.color;
+
+    let html = `
+      <div class="col-header" style="color:${col.color}; border-bottom-color:${col.color}33;">
+        <span>${col.label}</span>
+        <span class="col-count" style="background:${col.color}22; border-color:${col.color}; color:${col.color};">${colOrders.length}</span>
+      </div>`;
+
+    colOrders.forEach(order => {
+      const isRevenda = !!order.revenda;
+      const isTrilho  = !!order.trilho;
+      const isXp      = !!order.xp;
+      const isPista   = !!order.pista;
+      const cardColor = isPista   ? "#2b8a3e"
+                      : isXp     ? "#495057"
+                      : isTrilho ? "#b35900"
+                      : isRevenda? "#0c8599"
+                      : col.color;
+      const cardClass = isPista   ? " pista"
+                      : isXp     ? " xp"
+                      : isTrilho ? " trilho"
+                      : isRevenda? " revenda" : "";
+      const idClass   = isPista   ? " pista-id"
+                      : isXp     ? " xp-id"
+                      : isTrilho ? " trilho-id"
+                      : isRevenda? " revenda-id" : "";
+
+      const tags = [];
+      if (order.qty != null) tags.push(`<span class="tag">${order.qty} un</span>`);
+      if (order.delivery) {
+        const late = isLate(order.delivery);
+        tags.push(`<span class="tag ${late ? "late" : ""}">${late ? "⚠ " : ""}${fmtDate(order.delivery)}</span>`);
+      }
+      const compStr = (!isRevenda && !isTrilho && !isXp && !isPista && order.componentes || []).map(c => `${c.nome} ×${c.qtd}`).join(" · ");
+
+      // linha de detalhes específica por tipo
+      let detailLine = "";
+      if (isPista) {
+        const c = order.pista_calc || calcPista(order.pista_tamanho||0, order.pista_passo||55, order.pista_tubo_len||0, 1, order.pista_tem_pe);
+        detailLine = `<div class="card-spec">
+          Longarina ${order.pista_tamanho}mm · passo ${order.pista_passo}mm
+          <br><span style="color:#2b8a3e; font-weight:bold;">
+            ${c.nRoletes} roletes/pista · ${c.totalRoletes * order.qty / (order.qty||1) * (order.qty||1)} total
+            ${order.pista_tem_pe ? ` · ${c.nPes} pé${c.nPes>1?"s":""}` : " · sem pé"}
+          </span>
+        </div>`;
+      } else if (isXp) {
+        const rodPorPeca = order.xp_rod_por_peca || (order.xp_tamanho ? Math.floor(order.xp_tamanho / 55) : null);
+        const totalRod   = (rodPorPeca && order.qty) ? rodPorPeca * order.qty : null;
+        detailLine = `<div class="card-spec">
+          ${order.xp_tamanho ? `${order.xp_tamanho}mm/peça · barra ${order.xp_barra || 2300}mm` : ""}
+          ${order.xp_material ? ` · Rodízio ${order.xp_material}` : ""}
+          ${totalRod ? `<br><span style="color:#495057; font-weight:bold;">
+            ⚙ ${totalRod}× Rodízio ${order.xp_material} &nbsp;·&nbsp;
+            ${totalRod}× Parlock M8 &nbsp;·&nbsp;
+            ${totalRod}× Arruela M8 &nbsp;·&nbsp;
+            ${totalRod}× Parafuso M8×40
+          </span>` : ""}
+        </div>`;
+      } else if (isTrilho) {
+        const corEmoji = { "Preto": "⚫", "Amarelo": "🟡", "Branco": "⚪" }[order.trilho_cor] || "";
+        const qtdCarrinhos = (order.qty && order.trilho_tamanho)
+          ? order.qty * Math.ceil(order.trilho_tamanho / 1000) * 3
+          : null;
+        detailLine = `<div class="card-spec">
+          ${order.trilho_tamanho ? `${order.trilho_tamanho}mm/peça · barra ${order.trilho_barra || 4000}mm` : ""}
+          ${order.trilho_cor ? ` · Carrinho ${corEmoji} ${order.trilho_cor}` : ""}
+          ${qtdCarrinhos ? `<br><span style="color:#b35900; font-weight:bold;">🛒 ${qtdCarrinhos} carrinhos ${order.trilho_cor || ""}</span>` : ""}
+        </div>`;
+      } else if (!isRevenda) {
+        detailLine = `<div class="card-spec">
+          ${escapeHtml(order.tubo || "")} ${order.tubo_len ? `(${order.tubo_len}mm)` : ""}
+          &nbsp;·&nbsp;
+          ${order.sem_eixo
+            ? `<span style="color:#e03131; font-weight:bold;">⚠ SEM EIXO</span>`
+            : `${escapeHtml(order.eixo || "")} ${order.eixo_len ? `(${order.eixo_len}mm)` : ""}`
+          }
+        </div>`;
+      }
+
+      html += `
+        <div class="card${cardClass}" draggable="true" data-id="${order.id}"
+          style="border-color:${cardColor}55; border-left-color:${cardColor};">
+          <div class="confirm-overlay" style="display:none;" data-confirm="${order.id}">
+            <span>Apagar ${order.id}?</span>
+            <div class="row">
+              <button class="btn-small" style="background:#e03131;" data-del-yes="${order.id}">SIM</button>
+              <button class="btn-small" style="background:#868e96;" data-del-no="${order.id}">NÃO</button>
+            </div>
+          </div>
+          <div class="card-top">
+            <span class="card-id${idClass}" style="color:${cardColor};">${order.id}</span>
+            <button class="card-del" data-del="${order.id}">✕</button>
+          </div>
+          ${isPista   ? `<div class="badge-pista">🏗 PISTA DE ROLETES</div>` : ""}
+          ${isXp      ? `<div class="badge-xp">⚙ TRILHO XP 200kg</div>` : ""}
+          ${isTrilho  ? `<div class="badge-trilho">🛤 TRILHO</div>` : ""}
+          ${isRevenda ? `<div class="badge-revenda">🏷 REVENDA</div>` : ""}
+          ${order.note ? `<p class="card-note">${escapeHtml(order.note)}</p>` : ""}
+          <div class="card-tags">${tags.join("")}</div>
+          ${detailLine}
+          ${compStr ? `<div class="card-comps">${escapeHtml(compStr)}</div>` : ""}
+          <div class="card-drag-hint">☰ arraste para mover</div>
+        </div>`;
+    });
+
+    if (colOrders.length === 0) {
+      html += `<div class="empty-drop" style="border-color:${col.color}33; color:#aaa;">vazio</div>`;
+    }
+
+    wrap.innerHTML = html;
+  });
+
+  attachCardEvents();
+}
+
+function attachCardEvents() {
+  document.querySelectorAll(".card").forEach(function(card) {
+    card.addEventListener("dragstart", function(e) {
+      e.dataTransfer.setData("text/plain", card.dataset.id);
+      card.classList.add("dragging");
+    });
+    card.addEventListener("dragend", function() { card.classList.remove("dragging"); });
+
+    // ── Touch drag para iOS ──
+    var touchDragging = false;
+    var touchClone = null;
+    card.addEventListener("touchstart", function(e) {
+      touchDragging = false;
+      dragId.current = card.dataset.id;
+    }, { passive: true });
+    card.addEventListener("touchmove", function(e) {
+      touchDragging = true;
+      e.preventDefault();
+      var t = e.touches[0];
+      if (!touchClone) {
+        touchClone = card.cloneNode(true);
+        touchClone.style.cssText = "position:fixed;opacity:0.75;pointer-events:none;z-index:9999;width:" + card.offsetWidth + "px;box-shadow:0 4px 16px rgba(0,0,0,0.2);";
+        document.body.appendChild(touchClone);
+        card.style.opacity = "0.4";
+      }
+      touchClone.style.left = (t.clientX - card.offsetWidth / 2) + "px";
+      touchClone.style.top  = (t.clientY - 20) + "px";
+    }, { passive: false });
+    card.addEventListener("touchend", function(e) {
+      if (touchClone) { document.body.removeChild(touchClone); touchClone = null; }
+      card.style.opacity = "";
+      if (!touchDragging) return;
+      var t = e.changedTouches[0];
+      var el = document.elementFromPoint(t.clientX, t.clientY);
+      while (el && !el.dataset.col) el = el.parentElement;
+      if (el && el.dataset.col) {
+        var colId = el.dataset.col;
+        var order = state.orders.find(function(o) { return o.id === dragId.current; });
+        if (order && order.col !== colId) {
+          var fromLabel = COL_LABELS[order.col];
+          order.col = colId;
+          addLog(dragId.current + " movido de " + fromLabel + " → " + COL_LABELS[colId], "move");
+          saveState();
+          renderAll();
+        }
+      }
+      dragId.current = null;
+    });
+  });
+
+  document.querySelectorAll("[data-del]").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var id = btn.dataset.del;
+      var overlay = document.querySelector('[data-confirm="' + id + '"]');
+      if (overlay) overlay.style.display = "flex";
+    });
+  });
+  document.querySelectorAll("[data-del-yes]").forEach(function(btn) {
+    btn.addEventListener("click", function() { deleteOrder(btn.dataset.delYes); });
+  });
+  document.querySelectorAll("[data-del-no]").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var overlay = document.querySelector('[data-confirm="' + btn.dataset.delNo + '"]');
+      if (overlay) overlay.style.display = "none";
+    });
+  });
+}
+
+function setupDropZones() {
+  COLS.forEach(col => {
+    const wrap = document.getElementById(`col-${col.id}`);
+    wrap.addEventListener("dragover", e => {
+      e.preventDefault();
+      wrap.style.borderColor = col.color;
+      if (state.orders.filter(o => o.col === col.id).length === 0) {
+        const ed = wrap.querySelector(".empty-drop");
+        if (ed) { ed.style.borderColor = col.color + "88"; ed.style.color = col.color + "aa"; ed.textContent = "soltar aqui"; }
+      }
+    });
+    wrap.addEventListener("dragleave", () => {
+      wrap.style.borderColor = col.color + "55";
+      if (state.orders.filter(o => o.col === col.id).length === 0) {
+        const ed = wrap.querySelector(".empty-drop");
+        if (ed) { ed.style.borderColor = col.color + "33"; ed.style.color = "#aaa"; ed.textContent = "vazio"; }
+      }
+    });
+    wrap.addEventListener("drop", e => {
+      e.preventDefault();
+      wrap.style.borderColor = col.color + "55";
+      const id = e.dataTransfer.getData("text/plain");
+      const order = state.orders.find(o => o.id === id);
+      if (order && order.col !== col.id) {
+        const fromLabel = COL_LABELS[order.col];
+        order.col = col.id;
+        addLog(`${id} movido de ${fromLabel} → ${COL_LABELS[col.id]}`, "move");
+        saveState();
+        renderAll();
+      }
+    });
+  });
+}
+
+/* ════════════════════ RENDER: MATERIAIS ════════════════════ */
+
+function matCardHtml(label, value, unit, detail, color, sub) {
+  return `
+    <div class="mat-card" style="border-color:${color}33; border-top-color:${color};">
+      <div class="mat-card-label" style="color:${color};">${escapeHtml(label)}</div>
+      ${sub ? `<div class="mat-card-sub">${escapeHtml(sub)}</div>` : ""}
+      <div class="mat-card-value">${value}</div>
+      <div class="mat-card-unit">${unit}</div>
+      ${detail ? `<div class="mat-card-detail">${escapeHtml(detail)}</div>` : ""}
+    </div>`;
+}
+
+function renderMateriais() {
+  const mat = calcMateriais(state.orders);
+  const titleEl = document.getElementById("matTitle");
+  if (titleEl) titleEl.textContent =
+    `${state.orders.filter(o => !o.revenda).length} pedido${state.orders.filter(o => !o.revenda).length !== 1 ? "s" : ""} considerados`;
+
+  const tuboEntries = Object.entries(mat.tuboPorModelo);
+  document.getElementById("tuboCards").innerHTML = tuboEntries.length === 0
+    ? `<span class="empty-val">—</span>`
+    : tuboEntries.map(([key, info]) => {
+        if (!info) return "";
+        const detail = info.aviso
+          ? `⚠ corte (${info.corte}mm) maior que a barra (${info.barra}mm)!`
+          : `${info.corte}mm/corte · ${info.cortesPorBarra} cortes/barra · ${info.qty} un · sobra ${info.sobra.toLocaleString("pt-BR")} mm`;
+        return matCardHtml(info.modelo, info.barras || 0, "barras", detail, "#e07b39", `barra ${info.barra}mm`);
+      }).join("");
+
+  const eixoEntries = Object.entries(mat.eixoPorModelo);
+  document.getElementById("eixoCards").innerHTML = eixoEntries.length === 0
+    ? `<span class="empty-val">—</span>`
+    : eixoEntries.map(([key, info]) => {
+        if (!info) return "";
+        const detail = info.aviso
+          ? `⚠ corte (${info.corte}mm) maior que a barra (${info.barra}mm)!`
+          : `${info.corte}mm/corte · ${info.cortesPorBarra} cortes/barra · ${info.qty} un · sobra ${info.sobra.toLocaleString("pt-BR")} mm`;
+        return matCardHtml(info.modelo, info.barras || 0, "barras", detail, "#c97fff", `barra ${info.barra}mm`);
+      }).join("");
+
+  const compEntries = Object.entries(mat.compMap).sort((a, b) => a[0].localeCompare(b[0]));
+  document.getElementById("compCards").innerHTML = compEntries.length === 0
+    ? `<span class="empty-val">—</span>`
+    : compEntries.map(([nome, total]) =>
+        matCardHtml(nome, total, "un", null, "#4a9eff")
+      ).join("");
+
+  // pista de roletes
+  const pistaEl = document.getElementById("pistaCards");
+  if (pistaEl) {
+    if (mat.pistaAgg.length === 0) {
+      pistaEl.innerHTML = `<span class="empty-val">—</span>`;
+    } else {
+      pistaEl.innerHTML = mat.pistaAgg.map(({ id, qty, c, order: o }) => {
+        const sc = (q, corte, barra) => {
+          if (!q || !corte || !barra) return null;
+          const cpb = Math.floor(barra / corte);
+          return cpb > 0 ? Math.ceil(q / cpb) : q;
+        };
+        const longBarras  = sc(qty * 2, o.pista_tamanho,    o.pista_barra_long || 6000);
+        const tuboBarras  = sc(c.totalRoletes, o.pista_tubo_len, o.pista_tubo_barra || 6000);
+        const eixoBarras  = sc(c.totalRoletes, o.pista_tubo_len, o.pista_eixo_barra || 3000);
+        const eixoEstBarras = sc(c.totalEixosEst, c.eixoEstLen, o.pista_eixo_est_barra || 6000);
+        const cantBarras  = c.totalPes > 0 ? sc(c.totalPes, c.cantoneiraLen, o.pista_barra_cantoneira || 6000) : null;
+        const corColor = "#2b8a3e";
+        return `<div style="background:#f4fbf5; border:1.5px solid #8ce99a; border-left:4px solid #2b8a3e; border-radius:4px; padding:10px 12px; margin-bottom:8px; width:100%;">
+          <div style="font-size:11px; font-weight:bold; color:#2b8a3e; margin-bottom:6px;">${id} · ${qty} pista${qty>1?"s":""} · ${o.pista_tamanho}mm · passo ${o.pista_passo}mm</div>
+          <div class="mat-pills">
+            ${longBarras  ? pillHtml("Longarina (×2)", `${longBarras} barra${longBarras>1?"s":""}`, `${o.pista_tamanho}mm`, corColor) : ""}
+            ${tuboBarras  ? pillHtml(`Tubo ${o.pista_mat_rolete} (${c.totalRoletes} un)`, `${tuboBarras} barra${tuboBarras>1?"s":""}`, `${o.pista_tubo_len}mm`, corColor) : ""}
+            ${eixoBarras  ? pillHtml(`Eixo roscado ${o.pista_eixo_roscado} (${c.totalRoletes} un)`, `${eixoBarras} barra${eixoBarras>1?"s":""}`, `${o.pista_tubo_len}mm`, corColor) : ""}
+            ${pillHtml("Parlock M8", c.totalRoletes * 2, "2 por rolete", corColor)}
+            ${eixoEstBarras ? pillHtml(`Eixo estrutural Ø15 (${c.totalEixosEst} un)`, `${eixoEstBarras} barra${eixoEstBarras>1?"s":""}`, `${c.eixoEstLen}mm`, corColor) : ""}
+            ${pillHtml("Porca M8×16", c.totalEixosEst * 2, "2 por eixo est.", corColor)}
+            ${pillHtml("Arruela M8", c.totalEixosEst * 2, "2 por eixo est.", corColor)}
+            ${c.totalPes > 0 ? pillHtml("Pés estruturais", c.totalPes, `${c.nPes}/pista`, corColor) : pillHtml("Pé estrutural", "sem pé", null, "#aaa")}
+            ${cantBarras  ? pillHtml(`Cantoneira estrutural (${c.totalPes} un)`, `${cantBarras} barra${cantBarras>1?"s":""}`, `${c.cantoneiraLen}mm`, corColor) : ""}
+            ${c.totalPes > 0 ? pillHtml("Cantoneira 40×40", c.totalPes * 2, "2 por pé", corColor) : ""}
+            ${c.totalPes > 0 ? pillHtml("Sapata M12",      c.totalPes * 2, "2 por pé", corColor) : ""}
+            ${c.totalPes > 0 ? pillHtml("Sorriso",         c.totalPes * 2, "2 por pé", corColor) : ""}
+            ${c.totalPes > 0 ? pillHtml("Parafuso M8×16",  c.totalPes * 8, "8 por pé", corColor) : ""}
+            ${c.totalPes > 0 ? pillHtml("Arruela M8 (pé)", c.totalPes * 8, "8 por pé", corColor) : ""}
+            ${c.totalPes > 0 ? pillHtml("Porca M8 sext.",  c.totalPes * 8, "8 por pé", corColor) : ""}
+            ${c.totalPes > 0 ? pillHtml("Porca M12 sext.", c.totalPes * 4, "4 por pé", corColor) : ""}
+            ${c.totalPes > 0 ? pillHtml("Arruela M12",     c.totalPes * 4, "4 por pé", corColor) : ""}
+          </div>
+        </div>`;
+      }).join("");
+    }
+  }
+
+  // trilhos
+  const trilhoEntries = Object.entries(mat.trilhoPorTipo);
+  document.getElementById("trilhoCards").innerHTML = trilhoEntries.length === 0
+    ? `<span class="empty-val">—</span>`
+    : trilhoEntries.map(([key, info]) => {
+        const detail = info.aviso
+          ? `⚠ corte (${info.corte}mm) maior que a barra (${info.barra}mm)!`
+          : `${info.corte}mm/corte · ${info.cortesPorBarra} cortes/barra · ${info.qty} un · sobra ${info.sobra.toLocaleString("pt-BR")} mm`;
+        return matCardHtml(info.tipo, info.barras || 0, "barras", detail, "#b35900", `barra ${info.barra}mm`);
+      }).join("");
+
+  // carrinhos por cor
+  const COR_EMOJI_MAP = { "Preto": "⚫", "Amarelo": "🟡", "Branco": "⚪" };
+  const carrinhoEntries = Object.entries(mat.carrinhosPorCor);
+  document.getElementById("carrinhoCards").innerHTML = carrinhoEntries.length === 0
+    ? `<span class="empty-val">—</span>`
+    : carrinhoEntries.map(([cor, total]) =>
+        matCardHtml(`${COR_EMOJI_MAP[cor] || ""} ${cor}`, total, "un", null, "#b35900")
+      ).join("");
+
+  // trilho extra pesado — barras
+  const xpBarraEntries = Object.entries(mat.xpBarras);
+  document.getElementById("xpBarraCards").innerHTML = xpBarraEntries.length === 0
+    ? `<span class="empty-val">—</span>`
+    : xpBarraEntries.map(([key, info]) => {
+        const detail = info.aviso
+          ? `⚠ corte (${info.corte}mm) maior que a barra (${info.barSize}mm)!`
+          : `${info.corte}mm/corte · ${info.cortesPorBarra} cortes/barra · ${info.qtdPecas} un · sobra ${info.sobra.toLocaleString("pt-BR")} mm`;
+        return matCardHtml(key, info.barras || 0, "barras", detail, "#495057", `barra ${info.barSize}mm`);
+      }).join("");
+
+  // trilho extra pesado — rodízios por material (sem prefixo "Rodízio de")
+  const xpRodEntries = Object.entries(mat.xpRodiziosPorMaterial);
+  const xpFixosEntries = Object.entries(mat.xpFixos).filter(([,v]) => v > 0);
+  document.getElementById("xpRodizioCards").innerHTML =
+    (xpRodEntries.length === 0 && xpFixosEntries.length === 0)
+    ? `<span class="empty-val">—</span>`
+    : [
+        ...xpRodEntries.map(([material, total]) =>
+          matCardHtml(`Rodízio ${material}`, total, "un", "passo 55mm", "#495057")),
+        ...xpFixosEntries.map(([nome, total]) =>
+          matCardHtml(nome, total, "un", null, "#495057")),
+      ].join("");
+
+  // ── LEVANTAMENTO DE ESTOQUE ──
+  const globalEl = document.getElementById("globalCards");
+  if (globalEl) {
+    const g = mat.globalTotals;
+    const COR_EMOJI = { "Preto": "⚫", "Amarelo": "🟡", "Branco": "⚪" };
+
+    const row = (nome, qty, unit = "un", cor = "#333") => `
+      <div style="display:flex; justify-content:space-between; align-items:center;
+        padding:7px 0; border-bottom:1px solid #f1f3f5; font-size:10px;">
+        <span style="color:#555;">${escapeHtml(String(nome))}</span>
+        <span style="font-weight:bold; color:${cor}; font-size:13px; white-space:nowrap; margin-left:12px;">
+          ${qty} <span style="font-size:9px; color:#999; font-weight:normal;">${unit}</span>
+        </span>
+      </div>`;
+
+    const group = (titulo, cor, html) => !html.trim() ? "" : `
+      <div style="margin-bottom:16px;">
+        <div style="font-size:8px; font-weight:bold; letter-spacing:2px; color:${cor};
+          padding-bottom:4px; margin-bottom:2px; border-bottom:2px solid ${cor}33;">${titulo}</div>
+        ${html}
+      </div>`;
+
+    const tuboHtml = Object.entries(mat.tuboPorModelo)
+      .filter(function(e) { return e[1] && e[1].barras > 0; })
+      .sort(function(a,b) { return a[1].modelo.localeCompare(b[1].modelo); })
+      .map(function(e) { return row(e[1].modelo, e[1].barras, "barras", "#d9480f"); }).join("");
+
+    const eixoHtml = Object.entries(mat.eixoPorModelo)
+      .filter(function(e) { return e[1] && e[1].barras > 0; })
+      .sort(function(a,b) { return a[1].modelo.localeCompare(b[1].modelo); })
+      .map(function(e) { return row(e[1].modelo, e[1].barras, "barras", "#9c36b5"); }).join("");
+
+    const trilhoHtml = Object.entries(mat.trilhoPorTipo || {})
+      .filter(function(e) { return e[1] && e[1].barras > 0; })
+      .map(function(e) { return row(e[1].tipo, e[1].barras, "barras", "#b35900"); }).join("")
+      + Object.entries(mat.carrinhosPorCor || {}).sort()
+        .map(function(e) { return row("Carrinho " + (COR_EMOJI[e[0]]||"") + " " + e[0], e[1], "un", "#b35900"); }).join("");
+
+    const xpHtml = Object.entries(mat.xpBarras || {})
+      .filter(function(e) { return e[1] && e[1].barras > 0; })
+      .map(function(e) { return row("Trilho XP (barra " + e[1].barSize + "mm)", e[1].barras, "barras", "#495057"); }).join("")
+      + Object.entries(mat.xpRodiziosPorMaterial || {})
+        .filter(function(e) { return ["Parlock M8","Arruela M8","Parafuso M8×40"].indexOf(e[0]) === -1; })
+        .sort()
+        .map(function(e) { return row("Rodízio " + e[0], e[1], "un", "#495057"); }).join("");
+
+    const compHtml = Object.entries(g)
+      .filter(function(e) { return !e[0].startsWith("Tubo ") && !e[0].startsWith("Eixo "); })
+      .sort(function(a,b) { return a[0].localeCompare(b[0]); })
+      .map(function(e) { return row(e[0], e[1], "un", "#1864ab"); }).join("");
+
+    const html =
+      group("TUBOS",                 "#d9480f", tuboHtml) +
+      group("EIXOS",                 "#9c36b5", eixoHtml) +
+      group("TRILHO FLOW RACK",      "#b35900", trilhoHtml) +
+      group("TRILHO EXTRA PESADO",   "#495057", xpHtml) +
+      group("COMPONENTES",           "#1864ab", compHtml);
+
+    globalEl.innerHTML = html || `<div style="font-size:10px; color:#999;">Nenhum pedido no kanban.</div>`;
+  }
+
+  // por pedido — todos os tipos
+  const byOrder = document.getElementById("matByOrder");
+  const allOrders = state.orders;
+  if (allOrders.length === 0) {
+    byOrder.innerHTML = `<div style="color:#999; font-size:10px;">Nenhum pedido no kanban.</div>`;
+    return;
+  }
+
+  byOrder.innerHTML = allOrders.map(order => {
+    const col       = COL_MAP[order.col];
+    const isRevenda = !!order.revenda;
+    const isTrilho  = !!order.trilho;
+    const isXp      = !!order.xp;
+    const isPista   = !!order.pista;
+    const cardColor = isPista   ? "#2b8a3e"
+                    : isXp     ? "#495057"
+                    : isTrilho ? "#b35900"
+                    : isRevenda? "#0c8599"
+                    : col.color;
+
+    // badge de tipo
+    const typeBadge = isPista   ? `<span style="font-size:8px; font-weight:bold; background:#ebfbee; color:#2b8a3e; border:1px solid #8ce99a; border-radius:3px; padding:1px 5px; margin-right:4px;">PISTA</span>`
+                    : isXp      ? `<span style="font-size:8px; font-weight:bold; background:#f1f3f5; color:#495057; border:1px solid #adb5bd; border-radius:3px; padding:1px 5px; margin-right:4px;">XP</span>`
+                    : isTrilho  ? `<span style="font-size:8px; font-weight:bold; background:#fff4e6; color:#b35900; border:1px solid #ffcc99; border-radius:3px; padding:1px 5px; margin-right:4px;">TRILHO</span>`
+                    : isRevenda ? `<span style="font-size:8px; font-weight:bold; background:#e3fafc; color:#0c8599; border:1px solid #99e9f2; border-radius:3px; padding:1px 5px; margin-right:4px;">REVENDA</span>`
+                    : `<span style="font-size:8px; font-weight:bold; background:#e7f5ff; color:#1864ab; border:1px solid #bde0ff; border-radius:3px; padding:1px 5px; margin-right:4px;">ROLETE</span>`;
+
+    let body = "";
+
+    if (isPista) {
+      const c = order.pista_calc || calcPista(order.pista_tamanho||0, order.pista_passo||55, order.pista_tubo_len||0, order.qty||1, order.pista_tem_pe);
+      body = `<div class="mat-pills">
+        ${pillHtml(`${c.nRoletes} roletes/pista`, c.totalRoletes, "total", "#2b8a3e")}
+        ${pillHtml("Parlock M8", c.totalRoletes * 2, null, "#2b8a3e")}
+        ${pillHtml(`Eixo est. ${c.eixoEstLen}mm`, c.totalEixosEst, "un", "#2b8a3e")}
+        ${order.pista_tem_pe ? pillHtml(`${c.nPes} pé(s)/pista`, c.totalPes, "total", "#2b8a3e") : pillHtml("Pé estrutural", "sem pé", null, "#aaa")}
+      </div>`;
+    } else if (isRevenda) {      // revenda: só produto e qtd
+      body = `<div class="mat-pills">
+        ${order.qty ? pillHtml("Quantidade", order.qty, null, "#0c8599") : ""}
+      </div>`;
+    } else if (isTrilho) {
+      const pills = [];
+      if (order.trilho_tamanho && order.qty) {
+        const barra = order.trilho_barra || 4000;
+        const cortesPorBarra = Math.floor(barra / order.trilho_tamanho);
+        const barras = cortesPorBarra > 0 ? Math.ceil(order.qty / cortesPorBarra) : order.qty;
+        pills.push(pillHtml(`Trilho (${order.trilho_tipo_label || ""})`, `${barras} barra${barras !== 1 ? "s" : ""}`, `${order.trilho_tamanho}mm · barra ${barra}mm`, "#b35900"));
+        const carrinhos = order.qty * Math.ceil(order.trilho_tamanho / 1000) * 3;
+        pills.push(pillHtml(`Carrinho ${order.trilho_cor || ""}`, carrinhos, null, "#b35900"));
+      }
+      body = pills.length ? `<div class="mat-pills">${pills.join("")}</div>` : `<div class="mat-warn">⚠ Informe tamanho e quantidade</div>`;
+    } else if (isXp) {
+      const pills = [];
+      if (order.xp_tamanho && order.qty) {
+        const barra = order.xp_barra || 2300;
+        const cortesPorBarra = Math.floor(barra / order.xp_tamanho);
+        const barras = cortesPorBarra > 0 ? Math.ceil(order.qty / cortesPorBarra) : order.qty;
+        const rodPorPeca = order.xp_rod_por_peca || Math.floor(order.xp_tamanho / 55);
+        const totalComp  = rodPorPeca * order.qty;
+        pills.push(pillHtml("Trilho XP", `${barras} barra${barras !== 1 ? "s" : ""}`, `${order.xp_tamanho}mm · barra ${barra}mm`, "#495057"));
+        pills.push(pillHtml(`Rodízio ${order.xp_material}`, totalComp, null, "#495057"));
+        pills.push(pillHtml("Parlock M8",     totalComp, null, "#495057"));
+        pills.push(pillHtml("Arruela M8",     totalComp, null, "#495057"));
+        pills.push(pillHtml("Parafuso M8×40", totalComp, null, "#495057"));
+      }
+      body = pills.length ? `<div class="mat-pills">${pills.join("")}</div>` : `<div class="mat-warn">⚠ Informe tamanho e quantidade</div>`;
+    } else {
+      // rolete
+      const p = mat.porPedido.find(x => x.id === order.id);
+      if (!p || !p.qty || (!p.totalTuboMm && !p.totalEixoMm)) {
+        body = `<div class="mat-warn">⚠ Informe quantidade e comprimentos para calcular</div>`;
+      } else {
+        const pills = [];
+        if (p.totalTuboMm > 0) pills.push(pillHtml(`Tubo (${p.tubo})`, `${p.bTubo} barra${p.bTubo !== 1 ? "s" : ""}`, `${p.tubo_len}mm/corte`, "#d9480f"));
+        if (p.totalEixoMm > 0 && !order.sem_eixo) pills.push(pillHtml(`Eixo (${p.eixo})`, `${p.bEixo} barra${p.bEixo !== 1 ? "s" : ""}`, `${p.eixo_len}mm/corte`, "#9c36b5"));
+        p.compTotals.forEach(c => pills.push(pillHtml(c.nome, c.total, null, "#1864ab")));
+        body = `<div class="mat-pills">${pills.join("")}</div>`;
+      }
+    }
+
+    return `
+      <div class="mat-order-card" style="border-color:${cardColor}33; border-left-color:${cardColor};">
+        <div class="mat-order-head">
+          <div style="display:flex; align-items:center; gap:4px;">
+            ${typeBadge}
+            <span class="mat-order-id" style="color:${cardColor};">${order.id}</span>
+          </div>
+          <span class="mat-order-col">${COL_LABELS[order.col]}</span>
+        </div>
+        ${order.note ? `<div class="mat-order-note">${escapeHtml(order.note)}</div>` : ""}
+        ${body}
+      </div>`;
+  }).join("");
+}
+
+function pillHtml(label, value, sub, color) {
+  return `
+    <div class="mat-pill" style="background:${color}11; border-color:${color}33;">
+      <span class="lbl">${escapeHtml(label)}: </span>
+      <span class="val" style="color:${color};">${value}</span>
+      ${sub ? `<span class="sub"> (${escapeHtml(sub)})</span>` : ""}
+    </div>`;
+}
+
+/* ════════════════════ RENDER: HISTÓRICO ════════════════════ */
+
+const LOG_COLOR = { move: "#4a9eff", add: "#3ecf6e", del: "#ff4444", info: "#888" };
+const LOG_ICON  = { move: "→", add: "+", del: "✕", info: "·" };
+
+function renderHistorico() {
+  document.getElementById("logCount").textContent = state.log.length;
+  const list = document.getElementById("historyList");
+  if (state.log.length === 0) {
+    list.innerHTML = `<span style="font-size:10px; color:#444;">Nenhuma alteração registrada.</span>`;
+    return;
+  }
+  list.innerHTML = state.log.map(entry => `
+    <div class="history-row">
+      <span class="history-ts">${entry.ts}</span>
+      <span class="history-icon" style="color:${LOG_COLOR[entry.type]};">${LOG_ICON[entry.type]}</span>
+      <span class="history-msg">${escapeHtml(entry.msg)}</span>
+    </div>
+  `).join("");
+}
+
+/* ════════════════════ FORMULÁRIO: NOVO PEDIDO ════════════════════ */
+
+let newComponentes = [];
+
+function populateModeloSelect() {
+  const sel = document.getElementById("modeloSelect");
+  sel.innerHTML = MODELOS_ROLETE.map(m => `<option value="${m.id}">${escapeHtml(m.desc)}</option>`).join("");
+  sel.value = "aco_60";
+}
+
+function applyModelo(id) {
+  const m = MODELO_MAP[id];
+  newComponentes = m.componentes.map(c => ({ ...c, key: uid() }));
+  renderCompRows();
+
+  const isCustom = id === "custom";
+  document.getElementById("tuboStatic").style.display = isCustom ? "none" : "flex";
+  document.getElementById("tuboCustom").style.display = isCustom ? "block" : "none";
+  document.getElementById("eixoStatic").style.display = isCustom ? "none" : "flex";
+  document.getElementById("eixoCustom").style.display = isCustom ? "block" : "none";
+
+  document.getElementById("tuboStatic").textContent = m.tubo;
+  document.getElementById("eixoStatic").textContent = m.eixo;
+  if (isCustom) {
+    document.getElementById("tuboCustom").value = "";
+    document.getElementById("eixoCustom").value = "";
+  }
+}
+
+function renderCompRows() {
+  const wrap = document.getElementById("compRows");
+  wrap.innerHTML = newComponentes.map(c => `
+    <div class="comp-row" data-key="${c.key}">
+      <select data-field="nome">
+        ${COMPONENTES_LISTA.map(n => `<option value="${escapeHtml(n)}" ${n === c.nome ? "selected" : ""}>${escapeHtml(n)}</option>`).join("")}
+        ${!COMPONENTES_LISTA.includes(c.nome) ? `<option value="${escapeHtml(c.nome)}" selected>${escapeHtml(c.nome)}</option>` : ""}
+      </select>
+      <input type="number" min="0" placeholder="qtd" data-field="qtd" value="${c.qtd}">
+      <button data-remove="${c.key}">✕</button>
+    </div>
+  `).join("");
+
+  wrap.querySelectorAll(".comp-row").forEach(row => {
+    const key = row.dataset.key;
+    row.querySelector('[data-field="nome"]').addEventListener("change", e => {
+      const item = newComponentes.find(c => c.key === key);
+      if (item) item.nome = e.target.value;
+    });
+    row.querySelector('[data-field="qtd"]').addEventListener("input", e => {
+      const item = newComponentes.find(c => c.key === key);
+      if (item) item.qtd = e.target.value;
+    });
+    row.querySelector("[data-remove]").addEventListener("click", () => {
+      newComponentes = newComponentes.filter(c => c.key !== key);
+      renderCompRows();
+    });
+  });
+}
+
+function addOrder() {
+  const idInput = document.getElementById("newId");
+  const trimId = idInput.value.trim();
+  if (!trimId) return;
+  const label = trimId.toUpperCase().startsWith("OP-") ? trimId.toUpperCase() : `OP-${trimId.toUpperCase()}`;
+  if (state.orders.find(o => o.id === label)) {
+    alert(`Pedido ${label} já existe.`);
+    return;
+  }
+
+  const modeloId = document.getElementById("modeloSelect").value;
+  const modelo = MODELO_MAP[modeloId];
+  const isCustom = modeloId === "custom";
+
+  const tubo = isCustom ? document.getElementById("tuboCustom").value.trim() : modelo.tubo;
+  const eixo = isCustom ? document.getElementById("eixoCustom").value.trim() : modelo.eixo;
+
+  const newQty = document.getElementById("newQty").value;
+  const newDelivery = document.getElementById("newDelivery").value;
+  const newCol = document.getElementById("newCol").value;
+  const newTuboLen  = document.getElementById("newTuboLen").value;
+  const newTuboBarra = document.getElementById("newTuboBarra").value;
+  const newEixoLen  = document.getElementById("newEixoLen").value;
+  const newEixoBarra = document.getElementById("newEixoBarra").value;
+
+  const semEixo = document.getElementById("semEixoCheck").checked;
+
+  const compClean = newComponentes
+    .filter(c => c.nome && Number(c.qtd) > 0)
+    .map(c => ({ nome: c.nome, qtd: Number(c.qtd) }));
+
+  const order = {
+    id: label, col: newCol,
+    note: modelo.desc,
+    qty: newQty ? parseInt(newQty) : null,
+    delivery: newDelivery || null,
+    tubo, tubo_len: newTuboLen ? parseInt(newTuboLen) : null,
+    tubo_barra: newTuboBarra ? parseInt(newTuboBarra) : 6000,
+    eixo: semEixo ? null : eixo,
+    eixo_len: semEixo ? null : (newEixoLen ? parseInt(newEixoLen) : null),
+    eixo_barra: semEixo ? null : (newEixoBarra ? parseInt(newEixoBarra) : 3000),
+    sem_eixo: semEixo,
+    componentes: compClean,
+  };
+
+  state.orders.push(order);
+  addLog(
+    `${label} adicionado em ${COL_LABELS[newCol]}` +
+    (newQty ? ` · ${newQty} un` : "") +
+    ` · ${modelo.desc}` +
+    (semEixo ? " · SEM EIXO" : "") +
+    (newDelivery ? ` · entrega ${fmtDate(newDelivery)}` : ""),
+    "add"
+  );
+
+  idInput.value = "";
+  document.getElementById("newQty").value = "";
+  document.getElementById("newDelivery").value = "";
+  document.getElementById("newTuboLen").value = "";
+  document.getElementById("newTuboBarra").value = "6000";
+  document.getElementById("newEixoLen").value = "";
+  document.getElementById("newEixoBarra").value = "3000";
+  document.getElementById("semEixoCheck").checked = false;
+  document.getElementById("eixoFields").style.display = "block";
+
+  saveState();
+  renderAll();
+}
+
+function deleteOrder(id) {
+  const order = state.orders.find(o => o.id === id);
+  if (!order) return;
+  state.orders = state.orders.filter(o => o.id !== id);
+  addLog(`${id} apagado (estava em ${COL_LABELS[order.col]})`, "del");
+  saveState();
+  renderAll();
+}
+
+/* ════════════════════ TABS ════════════════════ */
+
+function setupTabs() {
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(`tab-${btn.dataset.tab}`).classList.add("active");
+      if (btn.dataset.tab === "materiais") renderMateriais();
+      if (btn.dataset.tab === "historico") renderHistorico();
+    });
+  });
+}
+
+/* ════════════════════ MEMO (anotações) ════════════════════ */
+
+function setupMemo() {
+  const memo = document.getElementById("memo");
+  memo.value = state.memo || "";
+  memo.addEventListener("input", () => {
+    state.memo = memo.value;
+    saveState();
+  });
+}
+
+/* ════════════════════ INIT ════════════════════ */
+
+function renderAll() {
+  renderKanban();
+  renderMateriais();
+  renderHistorico();
+}
+
+function calcPista(tamanho, passo, tuboLen, qty, temPe) {
+  const nRoletes = tamanho > 0 && passo > 0 ? Math.floor(tamanho / passo) : 0;
+  const totalRoletes = nRoletes * qty;
+
+  // Eixo estrutural: tuboLen + 24mm
+  // Regra: >= 2500mm → 4 eixos; senão max(2, ceil(tamanho/1000))
+  const eixoEstLen = tuboLen + 24;
+  const nEixosEst  = tamanho >= 2500 ? 4 : Math.max(2, Math.ceil(tamanho / 1000));
+  const totalEixosEst = nEixosEst * qty;
+
+  // Pés estruturais: 2 se tamanho < 2500, 3 se >= 2500
+  const nPes = temPe ? (tamanho >= 2500 ? 3 : 2) : 0;
+  const totalPes = nPes * qty;
+
+  // Cantoneira estrutural: tuboLen + 90mm (1 por pé)
+  const cantoneiraLen = tuboLen + 90;
+
+  return { nRoletes, totalRoletes, eixoEstLen, nEixosEst, totalEixosEst, nPes, totalPes, cantoneiraLen };
+}
+
+function setupPista() {
+  // Preview dinâmico ao alterar campos
+  const previewFields = ["pistaTamanho","pistaPasso","pistaTuboLen","pistaQty","pistaTemPe"];
+  previewFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("change", updatePistaPreview);
+    if (el) el.addEventListener("input", updatePistaPreview);
+  });
+
+  document.getElementById("pistaTemPe").addEventListener("change", e => {
+    document.getElementById("pistaCantoneiraSec").style.display = e.target.checked ? "block" : "none";
+    updatePistaPreview();
+  });
+
+  function updatePistaPreview() {
+    const tamanho = parseInt(document.getElementById("pistaTamanho").value) || 0;
+    const passo   = parseInt(document.getElementById("pistaPasso").value) || 55;
+    const tuboLen = parseInt(document.getElementById("pistaTuboLen").value) || 0;
+    const qty     = parseInt(document.getElementById("pistaQty").value) || 1;
+    const temPe   = document.getElementById("pistaTemPe").checked;
+    const preview = document.getElementById("pistaPreview");
+
+    if (!tamanho || !tuboLen) { preview.style.display = "none"; return; }
+
+    const c = calcPista(tamanho, passo, tuboLen, qty, temPe);
+    preview.style.display = "block";
+    preview.innerHTML = `
+      <strong>Prévia do cálculo (${qty} pista${qty > 1 ? "s" : ""}):</strong><br>
+      • ${c.nRoletes} roletes por pista → <strong>${c.totalRoletes} roletes total</strong><br>
+      • ${c.totalRoletes * 2} Parlocks M8 (2 por rolete)<br>
+      • ${c.nEixosEst} eixos estruturais ${c.eixoEstLen}mm por pista → <strong>${c.totalEixosEst} total</strong><br>
+      ${temPe ? `• ${c.nPes} pé${c.nPes > 1 ? "s" : ""} estrutural${c.nPes > 1 ? "is" : ""} por pista → <strong>${c.totalPes} total</strong><br>
+      • Cantoneira estrutural: ${c.cantoneiraLen}mm por pé → <strong>${c.totalPes} cantoneiras total</strong>` : "• Sem pé estrutural"}
+    `;
+  }
+
+  document.getElementById("addPistaBtn").addEventListener("click", () => {
+    const idInput = document.getElementById("pistaId");
+    const trimId  = idInput.value.trim();
+    if (!trimId) return;
+    const label = trimId.toUpperCase().startsWith("OP-") ? trimId.toUpperCase() : `OP-${trimId.toUpperCase()}`;
+    if (state.orders.find(o => o.id === label)) { alert(`Pedido ${label} já existe.`); return; }
+
+    const tamanho      = parseInt(document.getElementById("pistaTamanho").value) || 0;
+    const passo        = parseInt(document.getElementById("pistaPasso").value) || 55;
+    const tuboLen      = parseInt(document.getElementById("pistaTuboLen").value) || 0;
+    const qty          = parseInt(document.getElementById("pistaQty").value) || 1;
+    const delivery     = document.getElementById("pistaDelivery").value;
+    const barraLong    = parseInt(document.getElementById("pistaBarra").value) || 6000;
+    const matRolete    = document.getElementById("pistaMaterialRolete").value;
+    const eixoRoscado  = "M8"; // sempre M8 para pistas
+    const barraEixoEst = parseInt(document.getElementById("pistaEixoEstBarraLen").value) || 6000;
+    const barraTubo    = parseInt(document.getElementById("pistaEixoBarraTubo").value) || 6000;
+    const barraEixo    = parseInt(document.getElementById("pistaEixoBarraEixo").value) || 3000;
+    const temPe        = document.getElementById("pistaTemPe").checked;
+    const barraCantoneira = parseInt(document.getElementById("pistaCantoneiraBarra").value) || 6000;
+
+    if (!tamanho || !tuboLen) { alert("Informe o comprimento da longarina e do tubo do rolete."); return; }
+
+    const c = calcPista(tamanho, passo, tuboLen, qty, temPe);
+
+    const order = {
+      id: label, col: "corte",
+      note: `Pista de Roletes ${matRolete} · ${tamanho}mm · passo ${passo}mm`,
+      qty,
+      delivery: delivery || null,
+      pista: true,
+      pista_tamanho: tamanho,
+      pista_passo: passo,
+      pista_tubo_len: tuboLen,
+      pista_tubo_barra: barraTubo,
+      pista_eixo_roscado: eixoRoscado,
+      pista_eixo_barra: barraEixo,
+      pista_barra_long: barraLong,
+      pista_mat_rolete: matRolete,
+      pista_tem_pe: temPe,
+      pista_barra_cantoneira: barraCantoneira,
+      pista_eixo_est_barra: barraEixoEst,
+      pista_calc: c,
+      tubo: null, tubo_len: null, eixo: null, eixo_len: null, componentes: [],
+    };
+
+    state.orders.push(order);
+    addLog(
+      `${label} (PISTA) adicionado em CORTE · ${tamanho}mm · ${c.nRoletes} roletes/pista · ${qty} un` +
+      (temPe ? ` · ${c.nPes} pé(s)` : " · sem pé") +
+      (delivery ? ` · entrega ${fmtDate(delivery)}` : ""),
+      "add"
+    );
+
+    // reset
+    idInput.value = "";
+    document.getElementById("pistaQty").value = "";
+    document.getElementById("pistaDelivery").value = "";
+    document.getElementById("pistaTamanho").value = "";
+    document.getElementById("pistaTuboLen").value = "";
+    document.getElementById("pistaPasso").value = "55";
+    document.getElementById("pistaPreview").style.display = "none";
+
+    saveState();
+    renderAll();
+  });
+}
+
+function setupXp() {
+  document.getElementById("addXpBtn").addEventListener("click", () => {
+    const idInput = document.getElementById("xpId");
+    const trimId = idInput.value.trim();
+    if (!trimId) return;
+    const label = trimId.toUpperCase().startsWith("OP-") ? trimId.toUpperCase() : `OP-${trimId.toUpperCase()}`;
+    if (state.orders.find(o => o.id === label)) { alert(`Pedido ${label} já existe.`); return; }
+
+    const material = document.getElementById("xpMaterial").value;
+    if (!material) { alert("Selecione o material do rodízio."); return; }
+    const tamanho  = document.getElementById("xpTamanho").value;
+    const qty      = document.getElementById("xpQty").value;
+    const barra    = document.getElementById("xpBarra").value;
+    const delivery = document.getElementById("xpDelivery").value;
+
+    const rodPorPeca = tamanho ? Math.floor(parseInt(tamanho) / 55) : null;
+    const totalRod   = (rodPorPeca && qty) ? rodPorPeca * parseInt(qty) : null;
+
+    const order = {
+      id: label, col: "corte",
+      note: `Trilho Extra Pesado 200kg · Rodízio ${material}`,
+      qty: qty ? parseInt(qty) : null,
+      delivery: delivery || null,
+      xp: true,
+      xp_material: material,
+      xp_tamanho: tamanho ? parseInt(tamanho) : null,
+      xp_barra: barra ? parseInt(barra) : 2300,
+      xp_rod_por_peca: rodPorPeca,
+      tubo: null, tubo_len: null, eixo: null, eixo_len: null, componentes: [],
+    };
+
+    state.orders.push(order);
+    addLog(
+      `${label} (TRILHO XP) adicionado em CORTE · Rodízio ${material}` +
+      (tamanho ? ` · ${tamanho}mm/peça` : "") +
+      (qty ? ` · ${qty} un` : "") +
+      (totalRod ? ` · ${totalRod} rodízios` : "") +
+      (delivery ? ` · entrega ${fmtDate(delivery)}` : ""),
+      "add"
+    );
+
+    idInput.value = "";
+    document.getElementById("xpMaterial").value = "";
+    document.getElementById("xpTamanho").value = "";
+    document.getElementById("xpQty").value = "";
+    document.getElementById("xpBarra").value = "2300";
+    document.getElementById("xpDelivery").value = "";
+
+    saveState();
+    renderAll();
+  });
+}
+
+function setupTrilho() {
+  const TRILHO_LABELS = {
+    "45kg": "Trilho 45 kg",
+    "65kg": "Trilho 65 kg",
+    "45kg_aba": "Trilho 45 kg com aba",
+    "65kg_aba": "Trilho 65 kg com aba",
+  };
+  const COR_EMOJI = { "Preto": "⚫", "Amarelo": "🟡", "Branco": "⚪" };
+
+  document.getElementById("addTrilhoBtn").addEventListener("click", () => {
+    const idInput = document.getElementById("trilhoId");
+    const trimId = idInput.value.trim();
+    if (!trimId) return;
+    const label = trimId.toUpperCase().startsWith("OP-") ? trimId.toUpperCase() : `OP-${trimId.toUpperCase()}`;
+    if (state.orders.find(o => o.id === label)) { alert(`Pedido ${label} já existe.`); return; }
+
+    const tipo = document.getElementById("trilhoTipo").value;
+    if (!tipo) { alert("Selecione o tipo de trilho."); return; }
+    const cor = document.getElementById("trilhoCor").value;
+    if (!cor) { alert("Selecione a cor do carrinho."); return; }
+    const tamanho = document.getElementById("trilhoTamanho").value;
+    const qty = document.getElementById("trilhoQty").value;
+    const barra = document.getElementById("trilhoBarra").value;
+    const delivery = document.getElementById("trilhoDelivery").value;
+
+    const tipoLabel = TRILHO_LABELS[tipo];
+    const corEmoji = COR_EMOJI[cor] || "";
+
+    const order = {
+      id: label, col: "corte",
+      note: tipoLabel,
+      qty: qty ? parseInt(qty) : null,
+      delivery: delivery || null,
+      trilho: true,
+      trilho_tipo: tipo,
+      trilho_tipo_label: tipoLabel,
+      trilho_tamanho: tamanho ? parseInt(tamanho) : null,
+      trilho_barra: barra ? parseInt(barra) : 4000,
+      trilho_cor: cor,
+      tubo: null, tubo_len: null, eixo: null, eixo_len: null, componentes: [],
+    };
+
+    state.orders.push(order);
+    addLog(
+      `${label} (TRILHO) adicionado em EMBALAGEM · ${tipoLabel}` +
+      (tamanho ? ` · ${tamanho}mm` : "") +
+      ` · carrinho ${cor}` +
+      (qty ? ` · ${qty} un` : "") +
+      (delivery ? ` · entrega ${fmtDate(delivery)}` : ""),
+      "add"
+    );
+
+    idInput.value = "";
+    document.getElementById("trilhoTipo").value = "";
+    document.getElementById("trilhoCor").value = "";
+    document.getElementById("trilhoTamanho").value = "";
+    document.getElementById("trilhoQty").value = "";
+    document.getElementById("trilhoBarra").value = "4000";
+    document.getElementById("trilhoDelivery").value = "";
+
+    saveState();
+    renderAll();
+  });
+}
+
+function setupRevenda() {
+  const sel = document.getElementById("revProduto");
+  sel.innerHTML = `<option value="">— selecione o produto —</option>` +
+    PRODUTOS_REVENDA.map(p => `<option value="${p.replace(/"/g, '&quot;')}">${escapeHtml(p)}</option>`).join("");
+
+  sel.addEventListener("change", () => {
+    const custom = document.getElementById("revProdutoCustom");
+    custom.style.display = sel.value === "Outro (especificar)" ? "block" : "none";
+  });
+
+  document.getElementById("addRevendaBtn").addEventListener("click", () => {
+    const idInput = document.getElementById("revId");
+    const trimId = idInput.value.trim();
+    if (!trimId) return;
+    const label = trimId.toUpperCase().startsWith("OP-") ? trimId.toUpperCase() : `OP-${trimId.toUpperCase()}`;
+    if (state.orders.find(o => o.id === label)) { alert(`Pedido ${label} já existe.`); return; }
+
+    const selVal = document.getElementById("revProduto").value;
+    if (!selVal) { alert("Selecione o produto."); return; }
+    const produto = selVal === "Outro (especificar)"
+      ? (document.getElementById("revProdutoCustom").value.trim() || "Produto não especificado")
+      : selVal;
+
+    const qty = document.getElementById("revQty").value;
+    const delivery = document.getElementById("revDelivery").value;
+
+    const order = {
+      id: label, col: "embalagem",
+      note: produto,
+      qty: qty ? parseInt(qty) : null,
+      delivery: delivery || null,
+      revenda: true,
+      tubo: null, tubo_len: null, eixo: null, eixo_len: null, componentes: [],
+    };
+
+    state.orders.push(order);
+    addLog(
+      `${label} (REVENDA) adicionado em EMBALAGEM · ${produto}` +
+      (qty ? ` · ${qty} un` : "") +
+      (delivery ? ` · entrega ${fmtDate(delivery)}` : ""),
+      "add"
+    );
+
+    idInput.value = "";
+    document.getElementById("revProduto").value = "";
+    document.getElementById("revProdutoCustom").value = "";
+    document.getElementById("revProdutoCustom").style.display = "none";
+    document.getElementById("revQty").value = "";
+    document.getElementById("revDelivery").value = "";
+
+    saveState();
+    renderAll();
+  });
+}
+
+function switchForm(idx) {
+  document.querySelectorAll(".form-panel").forEach(p => p.style.display = "none");
+  document.querySelectorAll(".form-tab-btn").forEach(b => b.classList.remove("active"));
+  const panel = document.getElementById(`formPanel-${idx}`);
+  const tab   = document.getElementById(`formTab-${idx}`);
+  if (panel) panel.style.display = "block";
+  if (tab)   tab.classList.add("active");
+}
+
+function init() {
+  populateModeloSelect();
+  applyModelo("aco_60");
+
+  // Form carousel
+  document.querySelectorAll(".form-tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => switchForm(parseInt(btn.dataset.form)));
+  });
+
+  document.getElementById("modeloSelect").addEventListener("change", e => applyModelo(e.target.value));
+  document.getElementById("addCompBtn").addEventListener("click", () => {
+    newComponentes.push({ nome: COMPONENTES_LISTA[0], qtd: 1, key: uid() });
+    renderCompRows();
+  });
+  document.getElementById("addOrderBtn").addEventListener("click", addOrder);
+  document.getElementById("semEixoCheck").addEventListener("change", e => {
+    document.getElementById("eixoFields").style.display = e.target.checked ? "none" : "flex";
+  });
+  document.getElementById("clearLogBtn").addEventListener("click", () => {
+    state.log = [];
+    addLog("Histórico limpo.", "info");
+    renderHistorico();
+  });
+
+  setupTabs();
+  setupDropZones();
+  setupMemo();
+  setupPista();
+  setupXp();
+  setupTrilho();
+  setupRevenda();
+  renderAll();
+}
+
+init();
+</script>
+</body>
+</html>

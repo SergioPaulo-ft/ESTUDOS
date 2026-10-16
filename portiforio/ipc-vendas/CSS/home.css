@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Itim&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary_color_blue: #0C0A29;
+    --secundary_color_blue: #0A1129;
+    --tertiary_color_blue: #0A1B29;
+    --background_color_gray: #D9D9D9;
+    --hover-color-blue: #080b3b;
+    --hover-secundary-color: #202670;
+    --titulo-destaque: #e22e2e;
+}
+
+body {
+    font-family: "Verdana", sans-serif;
+    font-size: 18px;
+    overflow-x: hidden;
+}
+
+a{
+    text-decoration: none;
+    color: #0C0A29;
+}
+
+.container-home {
+    max-width: 1200px; /* Ajuste para o mesmo tamanho da home-adm */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    background: var(--secundary_color_blue);
+    color: #fff;
+}
+.header .box-logout:hover{
+    cursor: pointer;
+}
+
+.box-logout span {
+    margin-left: 5px;
+}
+
+/* Estilização da barra de pesquisa */
+.box-search {
+    margin-top: 50px;
+    padding: 10px;
+    border: 1px solid var(--tertiary_color_blue);
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden; /* Mantém o efeito dentro da borda */
+}
+
+.box-search, .box-search i, .box-search input:hover{
+    cursor: pointer;
+}
+
+/* Ícone de pesquisa */
+.box-search i {
+    font-size: large;
+    color: #fff;
+    background-color: var(--secundary_color_blue);
+    border-radius: 100%;
+    padding: 8px;
+    position: relative;
+    z-index: 2; /* Mantém o ícone sobre o efeito */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Criando um efeito de preenchimento ao redor do ícone */
+.box-search::before {
+    content: "";
+    position: absolute;
+    left: 11px; /* Mantém alinhado com o ícone */
+    width: 30px;
+    height: 30px;
+    background-color: var(--secundary_color_blue);
+    border-radius: 100%;
+    transform: scale(0.8);
+    transition: transform 0.1s ease-in-out;
+    z-index: 1;
+}
+
+/* Ativando o efeito quando um elemento dentro recebe foco */
+.box-search:focus-within::before {
+    transform: scale(1.4); /* Expande o efeito ao redor do ícone */
+}
+
+.box-search input {
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    padding-inline: 5px;
+    font-family: 'Verdana', sans-serif;
+    color: #080A5E;
+    flex: 1;
+    margin-left: 6px;
+}
+
+.box-search input:focus {
+    outline: none;
+    width: 300px;
+    transition: transform 0.2s ease-in-out;
+}
+.box-search:focus-within i {
+    color: var(--titulo-destaque);
+}
+
+/* Outros estilos */
+.box-produto {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--tertiary_color_blue);
+    padding: 15px;
+}
+
+.box-produto img {
+    width: 260px;
+}
+
+.box-produto input {
+    width: 80px;
+    padding: 8px;
+    font-size: 15px;
+}
+
+.box-produto input:focus {
+    outline: none;
+}
+.box-produto input[type=submit] {
+    margin-top: 30px;
+    background: var(--primary_color_blue);
+    color: #fff;
+    font-family: "Itim", serif;
+    font-weight: 400;
+    font-size: 18px;
+    border: none;
+    width: 100px;
+
+}
+.box-produto input[type=submit]:hover {
+    cursor: pointer;
+    background: var(--hover-color-blue);
+    color: var(--titulo-destaque);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.226);
+    transition-duration: 0.2s;
+}
+.inputs-comprimento   input[type=number]::-webkit-inner-spin-button{
+    appearance: none; 
+}
+/* media */
+@media (max-width: 768px) {
+    .box-produto {
+        flex-direction: column;
+        align-items: center;
+    }
+    .box-produto img {
+        width: 200px; /* Ajusta para telas menores */
+        border: #080A5E 1px solid;
+        margin-bottom: 10px;
+    }
+}

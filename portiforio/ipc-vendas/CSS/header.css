@@ -1,0 +1,49 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    background: var(--secundary_color_blue);
+    color: #fff;
+}
+.header h1{
+    color: var(--titulo-destaque);
+    font-size: 32px;
+}
+.box-logout{
+    margin-right: 10px;
+}
+
+.box-logout:hover{
+    cursor: pointer;
+}
+
+.box-logout:hover span{
+    margin-left: 5px;
+    transition: margin-left 0.2s ease-in-out;
+}
+
+.box-logout:hover i{
+    color: #bb1f1f;
+    transition: color 0.2s ease-in-out;
+} 
+
+.box-logout i{
+    font-size: 22px;
+}
+.box-logout span {
+    margin-left: 10px;
+    font-size: 22px;
+}
+/* media */
+@media (max-width: 768px) {
+    .header h1{
+        font-size: 27px;
+    }
+    .header .box-logout{
+        width: 115px;
+    }
+    .header .box-logout span{
+        font-size: 18px;
+    }
+}

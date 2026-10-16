@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubo/Eixo</title>
+
+    <!-- Font Awesome -->
+    <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer"
+    >
+
+    <!-- estilo Produtos -->
+    <link rel="stylesheet" href="CSS/produtos.css">
+</head>
+<body>
+    <a href="home-adm.html">voltar ao home <i class="fa-solid fa-arrow-right" style="transform: rotate(180deg); margin-top: 50px;"></i></a>
+    <div class="box-titulo">
+        <hr class="top-line">
+        <h1>Monte seu Rolete</h1>
+        <hr class="bot-line">
+    </div>
+
+    <main>
+        <!-- tabelas tubo-eixo -->
+        <h3 class="table-title">Selecione o tubo e eixo do seu rolete</h3>
+        <section class="section-rolete">
+            <div class="container-tubo">
+                <div class="box-search">
+                    <label for="pesquisa-tubo"><i class="fa-solid fa-magnifying-glass"></i></label>
+                    <input id="pesquisa-tubo" class="pesquisa-tubo" type="text" placeholder="tubo">
+                </div>
+                <div class="tipo-custo">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>cod_tubo</th>
+                                <th>diametro</th>
+                                <th>espessura</th>
+                                <th>tipo</th>
+                                <th>tamanho</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>t01</td>
+                                <td>50</td>
+                                <td>1,5</td>
+                                <td>pvc</td>
+                                <td>6000</td>
+                            </tr>
+                            <tr>
+                                <td>t02</td>
+                                <td>50</td>
+                                <td>1,5</td>
+                                <td>aco</td>
+                                <td>6000</td>
+                            </tr>
+                            <tr>
+                                <td>t03</td>
+                                <td>75</td>
+                                <td>1,5</td>
+                                <td>pvc</td>
+                                <td>3000</td>
+                            </tr>
+                            <tr>
+                                <td>t04</td>
+                                <td>63</td>
+                                <td>1,5</td>
+                                <td>aco</td>
+                                <td>3000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <section class="section-eixo">
+            <div class="container-eixo">
+                <div class="box-search">
+                    <label for="pesquisa-eixo"><i class="fa-solid fa-magnifying-glass"></i></label>
+                    <input id="pesquisa-eixo" class="pesquisa-eixo" type="text" placeholder="eixo">
+                </div>
+                <div class="tipo-custo">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>cod-eixo</th>
+                                <th>diametro</th>
+                                <th>tipo</th>
+                                <th>tamanho</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>e01</td>
+                                <td>8</td>
+                                <td>roscado</td>
+                                <td>3000</td>
+                            </tr>
+                            <tr>
+                                <td>e02</td>
+                                <td>12</td>
+                                <td>roscado</td>
+                                <td>3000</td>
+                            </tr>
+                            <tr>
+                                <td>e03</td>
+                                <td>8</td>
+                                <td>liso</td>
+                                <td>7300</td>
+                            </tr>
+                            <tr>
+                                <td>e04</td>
+                                <td>12</td>
+                                <td>liso</td>
+                                <td>7300</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="box-titulo">
+            <hr class="bot-line">
+            <h1>Componentes</h1>
+            <hr class="top-line">
+        </div>
+        <!-- form componentes -->
+        <form action="" method="post" class="forms-componentes" id="forms-componentes">
+            <section class="selects-componentes">
+                <!-- Mancal ----------------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="componente">
+                    <h2>Mancal</h2>
+                    <div class="box-select">
+                        <p>Diâmetro</p>
+                        <select name="diametro-mancal" id="diametro-mancal">
+                            <option value="50">50</option>
+                            <option value="60">60</option>
+                            <option value="63">63</option>
+                            <option value="76">76</option>
+                        </select>  
+                    </div>
+                    <div class="box-select">
+                        <p>Parede</p>
+                        <select name="parede-mancal" id="parede-mancal">
+                            <option value="1,5">1,5</option>
+                            <option value="2,0">2,0</option>
+                        </select>  
+                    </div> 
+                    <div class="box-quant">
+                        <p>Quantidade</p>
+                        <input type="number" name="quant-mancal" id="quant-mancal">
+                    </div>
+                </div>
+                <!-- Rolamento -------------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="componente">
+                    <h2>Rolamento</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Modelo</p>
+                        <select name="modelo-rolamento-01" id="modelo-rolamento-01">
+                            <option value="6202">6202</option>
+                            <option value="6201">6201</option>
+                            <option value="6204">6204</option>
+                            <option value="6000">6000</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-rolamento-01" id="quant-rolamento-01">
+                        </div>
+                    </div>
+                    <!-- 02 -->
+                    <div class="box-select">
+                        <p>Modelo</p>
+                        <select name="modelo-rolamento-02" id="modelo-rolamento-02">
+                            <option value="6201">6201</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-rolamento-02" id="quant-rolamento-02">
+                        </div>
+                    </div>
+                </div>
+                <!-- Tampa ------------------------------------------------------------------------------------------------------------------------------------------------>
+                <div class="componente">
+                    <h2>Tampa</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Diametro</p>
+                        <select name="diametro-tampa-01" id="diametro-tampa-01">
+                            <option value="m8">m8</option>
+                            <option value="m12">m12</option>
+                            <option value="m15">m15</option>
+                            <option value="m8-31">m8-31</option>
+                            <option value="m8-38">m8-38</option>
+                            <option value="m12-sext">m12-sext</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-tampa-01" id="quant-tampa-01">
+                        </div>
+                    </div>
+                    <!-- 02 -->
+                    <div class="box-select">
+                        <p>Modelo</p>
+                        <select name="modelo-tampa-02" id="modelo-tampa-02">
+                            <option value="m12-sem-reducao">m12 sem redução</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-tampa-02" id="quant-tampa-02">
+                        </div>
+                    </div>
+                </div>
+                <!-- Porca ------------------------------------------------------------------------------------------------------------------------------------------------>
+                <div class="componente">
+                    <h2>Porca</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Diametro</p>
+                        <select name="diametro-porca" id="diametro-porca">
+                            <option value="m8">m8</option>
+                            <option value="m12">m12</option>
+                            <option value="m8-inox">m8-inox</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-porca" id="quant-porca">
+                        </div>
+                    </div>
+                </div>
+                <!-- Anel ------------------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="componente">
+                    <h2>Anel</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Diametro</p>
+                        <select name="diametro-anel" id="diametro-anel">
+                            <option value="m8">m8</option>
+                            <option value="m12">m12</option>
+                            <option value="m15">m15</option>
+                            <option value="m20">m20</option>
+                            <option value="m8-inox">m8-inox</option>
+                            <option value="m12-inox">m12-inox</option>
+
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-anel" id="quant-anel">
+                        </div>
+                    </div>
+                </div> 
+                <!-- Labirinto -------------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="componente">
+                    <h2>Labirinto</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Diametro</p>
+                        <select name="diametro-labirinto" id="diametro-labirinto">
+                            <option value="m15">m15</option>
+                            <option value="m20">m20</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-labirinto" id="quant-labirinto">
+                        </div>
+                    </div>
+                </div> 
+                <!-- Parlock ---------------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="componente">
+                    <h2>Parlock</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Diametro</p>
+                        <select name="diametro-parlock" id="diametro-parlock">
+                            <option value="m8">m8</option>
+                            <option value="m12">m12</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-parlock" id="quant-parlock">
+                        </div>
+                    </div>
+                </div> 
+                <!-- Mola ------------------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="componente">
+                    <h2>Mola</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Diametro</p>
+                        <select name="diametro-mola" id="diametro-mola">
+                            <option value="m12">m12</option>
+                            <option value="m12-galvanizado">m12-galvanizado</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-mola" id="quant-mola">
+                        </div>
+                    </div>
+                </div> 
+                <!-- Engrenagem ------------------------------------------------------------------------------------------------------------------------------------------->
+                <div class="componente">
+                    <h2>Engrenagem</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Modelo</p>
+                        <select name="modelo-engrenagem" id="modelo-engrenagem">
+                            <option value="simples">simples</option>
+                            <option value="dupla">dupla</option>
+                            <option value="poly-vee">poly-vee</option>
+                            <option value="poly-cord">poly-cord</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-engrenagem" id="quant-engrenagem">
+                        </div>
+                    </div>
+                </div> 
+                <!-- Bucha de engrenagem ---------------------------------------------------------------------------------------------------------------------------------->
+                <div class="componente">
+                    <h2>Bucha de engrenagem</h2>
+                    <!-- 01 -->
+                    <div class="box-select">
+                        <p>Modelo</p>
+                        <select name="modelo-bucha_engrenagem" id="modelo-bucha_engrenagem">
+                            <option value="simples-pvc">simples-pvc</option>
+                            <option value="dupla-pvc">dupla-pvc</option>
+                            <option value="simples-aco">simples-aco</option>
+                            <option value="dupla-aco">dupla-aco</option>
+                        </select>  
+                        <div class="box-quant">
+                            <p>Quantidade</p>
+                            <input type="number" name="quant-bucha_engrenagem" id="quant-bucha_engrenagem">
+                        </div>
+                    </div>
+                </div> 
+            </section>
+            <!-- informações finais do produto -->
+            <section class="descricao-componentes">
+                <div class="container-box-input">
+                    <div class="box-input">
+                        <label for="mao_de_obra">Mao de Obra:</label>
+                        <input type="number" name="mao_de_obra" id="mao_de_obra">
+                    </div>
+                    <div class="box-input">
+                        <label for="modelo-produto">Modelo do produto:</label>
+                        <input type="number" name="modelo-produto" id="modelo-produto">
+                    </div>
+                </div>
+                <div class="box-image">
+                    <p>Cole a imagem do seu produto aqui</p>
+                    <img src="" width="200px" alt="" id="img-produto" class="img-produto">
+                </div>
+        
+            </section>
+            <input type="submit" value="salvar" class="salvar" id="salvar">
+        </form>
+    </main>
+
+</body>
+</html>

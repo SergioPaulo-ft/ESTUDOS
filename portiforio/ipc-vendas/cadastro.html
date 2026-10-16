@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    
+    <!-- Font Awesome -->
+    <link 
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer"
+    >
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="CSS/cadastro.css">
+</head>
+<body>
+    <main class="container-cadastro">
+        <div class="box-titulo">
+            <hr class="top-line">
+            <h1>Preencha seus dados</h1>
+            <hr class="bot-line">
+        </div>
+        
+        <form action="" method="post" class="form-cadastro" id="form-cadastro">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome">
+            
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+            
+            <label for="senha">Senha</label>
+            <input type="password" name="senha" id="senha">
+            
+            <div class="box-submit-select">
+                <div class="box-select">
+                    Qual é seu cargo? <br>
+                    <select name="cargo" id="cargo" class="cargo">
+                        <option value="Vendas">Vendas</option>
+                        <option value="Adm">Administrativo</option>
+                    </select>
+                </div>
+                <input type="submit" value="Cadastrar" id="cadastrar" class="cadastrar">
+            </div>
+        </form>
+    </main>
+</body>
+</html>

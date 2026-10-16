@@ -25,15 +25,22 @@ form {
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    padding: 20px;
+    padding: 34px;
     width: 100%;
     max-width: 600px;
     margin-top: 20px;
     color: #000000;
 }
 
+.info-pecas {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 12px 40px;
+    align-items: center;
+}
+
 .input-box {
-    margin-bottom: 15px;
+    margin-bottom: 0;
 }
 
 label {
@@ -73,10 +80,32 @@ select:focus {
 
 .bt:hover {
     background: #e6c200;
+    color: #fff;
+}
+
+.add-sobras{
+    border: 1px solid #e6c200;
+    padding: 15px;
+}
+.add-sobras:hover{
+    background: #e6c200;
+    color: #fff;
+    cursor: pointer;
+}
+
+.delete:hover{
+    color: #ff0000;
+    cursor: pointer;
+}
+
+.titulo-result{
+    color: #ffd700;
+    font-size: 1.5em;
+    margin-top: 30px;
 }
 
 #result {
-    background: #ffd700;
+    background: #fff;
     color: #000000;
     padding: 20px;
     border-radius: 12px;
@@ -105,7 +134,33 @@ p {
     display: flex;
     align-items: center;
     gap: 10px;
+    justify-content: flex-end;
 }
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.button-group .bt {
+    width: 48%;
+}
+.item-lista {
+    font-size: 18px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    color: #000000;
+    border: 1px solid #e6c200;
+}
+.item-lista-total{
+    font-size: 18px;
+    color: #ff0000;
+}
+
 
 @media (max-width: 600px) {
     h1 {
